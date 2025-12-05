@@ -623,9 +623,6 @@ if (IS_LOGIN_PAGE) {
 
   // Login form submit event
   document.getElementById('login-form').addEventListener('submit', function(e) {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    // Simulate backend check - for demo, assume valid
     showOtpModal(); // Send OTP
   });
 
