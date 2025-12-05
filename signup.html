@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SorSUlyap - Login</title>
+    <title>SorSUlyap - Sign Up</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -24,27 +24,25 @@
             padding: 20px;
         }
 
-       
         .cont {
-    
             background: white;
-            padding: 25px; 
-            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3); 
+            padding: 25px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
             max-width: 1000px;
             width: 100%;
         }
 
-        .login-container {
+        .signup-container {
             display: flex;
             background-color: white;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             min-width: 950px;
-            min-height: 550px;
+            min-height: 650px;
         }
 
         /* Left Side - Branding */
-        .login-left {
+        .signup-left {
             background: linear-gradient(180deg, rgb(236, 193, 193) 2%, rgb(197, 87, 87) 100%);
             flex: 1;
             display: flex;
@@ -62,10 +60,10 @@
         .logo-circle {
             width: 150px;
             height: 150px;
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
         }
 
         .logo-circle img {
@@ -90,24 +88,25 @@
         }
 
         /* Right Side - Form */
-        .login-right {
+        .signup-right {
             flex: 1;
-            padding: 60px 50px;
+            padding: 40px 50px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            overflow-y: auto;
         }
 
-        .login-title {
+        .signup-title {
             font-size: 32px;
             font-weight: 700;
             color: #000000;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             text-align: center;
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .form-label {
@@ -168,7 +167,7 @@
             color: #666;
         }
 
-        .login-btn {
+        .signup-btn {
             width: 100%;
             padding: 14px;
             background: rgb(227, 115, 115);
@@ -182,47 +181,45 @@
             margin-top: 10px;
         }
 
-        .login-btn:hover {
+        .signup-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(232, 165, 165, 0.4);
         }
 
-        .login-btn:active {
+        .signup-btn:active {
             transform: translateY(0);
         }
 
-        .login-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 25px;
+        .signup-footer {
+            text-align: center;
+            margin-top: 20px;
             font-size: 14px;
         }
 
-        .login-footer a {
+        .signup-footer a {
             color: #333;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
         }
 
-        .login-footer a:hover {
+        .signup-footer a:hover {
             color: #E8A5A5;
             text-decoration: underline;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .login-container {
+            .signup-container {
                 flex-direction: column;
                 min-width: auto;
             }
 
-            .login-left {
+            .signup-left {
                 padding: 40px 30px;
             }
 
-            .login-right {
+            .signup-right {
                 padding: 40px 30px;
             }
 
@@ -230,18 +227,18 @@
                 font-size: 28px;
             }
 
-            .login-title {
+            .signup-title {
                 font-size: 26px;
-                margin-bottom: 30px;
+                margin-bottom: 25px;
             }
         }
 
         @media (max-width: 480px) {
-            .login-right {
+            .signup-right {
                 padding: 30px 20px;
             }
 
-            .login-left {
+            .signup-left {
                 padding: 30px 20px;
             }
 
@@ -262,60 +259,115 @@
 </head>
 <body>
     <div class="cont">
-    <div class="login-container">
-        <!-- Left Side - Branding -->
-        <div class="login-left">
-            <div class="logo-container">
-                <div class="logo-circle">
-                    <img src="assets/img/SorSUlyap_logo.png" alt="SorSUlyap Logo">  
+        <div class="signup-container">
+            <!-- Left Side - Branding -->
+            <div class="signup-left">
+                <div class="logo-container">
+                    <div class="logo-circle">
+                        <img src="D:\My files\COLLEGE\3rd yr 1st sem\Software Eng and App Dev\Learner\assets\img\SorSUlyap_logo.png" alt="SorSUlyap Logo">
+                    </div>
                 </div>
+                <h1 class="brand-title">SorSUlyap</h1>
+                <p class="brand-tagline">Connecting Campus. Simplifying Information</p>
             </div>
-            <h1 class="brand-title">SorSUlyap</h1>
-            <p class="brand-tagline">Connecting Campus. Simplifying Information</p>
-        </div>
 
-        <!-- Right Side - Login Form -->
-        <div class="login-right">
-            <h2 class="login-title">LOG IN</h2>
-            
-            <form>
-                <div class="form-group">
-                    <label class="form-label">SorSu Email</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-envelope input-icon"></i>
-                        <input 
-                            type="email" 
-                            class="form-input" 
-                            placeholder="yourname@sorsu.edu.ph"
-                            required
-                        >
+            <!-- Right Side - Sign Up Form -->
+            <div class="signup-right">
+                <h2 class="signup-title">SIGN UP</h2>
+                
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user input-icon"></i>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                placeholder="Enter your name"
+                                required
+                            >
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock input-icon"></i>
-                        <input 
-                            type="password" 
-                            class="form-input" 
-                            id="password"
-                            placeholder="Enter password"
-                            required
-                        >
-                        <button type="button" class="password-toggle" onclick="togglePassword()">
-                            <i class="fas fa-eye" id="toggleIcon"></i>
-                        </button>
+                    <div class="form-group">
+                        <label class="form-label">SorSU Email</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input 
+                                type="email" 
+                                class="form-input" 
+                                placeholder="yourname@sorsu.edu.ph"
+                                required
+                            >
+                        </div>
                     </div>
-                </div>
 
-                <button type="submit" class="login-btn">Login</button>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input 
+                                type="password" 
+                                class="form-input" 
+                                id="password"
+                                placeholder="Enter password"
+                                required
+                            >
+                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                                <i class="fas fa-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                <div class="login-footer">
-                    <a href="#">Create an account</a>
-                    <a href="#">Forgot Password?</a>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label class="form-label">ID No</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-id-card input-icon"></i>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                placeholder="Enter ID No."
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Program</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-graduation-cap input-icon"></i>
+                            <select class="form-input" required>
+                                <option value="">Select Program</option>
+                                <option value="bscs">BS Computer Science</option>
+                                <option value="bsit">BS Information Technology</option>
+                                <option value="bsba">BS Business Administration</option>
+                                <option value="beed">Bachelor of Elementary Education</option>
+                                <option value="bsed">Bachelor of Secondary Education</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Roles</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user-tag input-icon"></i>
+                            <select class="form-input" required>
+                                <option value="">Select Role</option>
+                                <option value="student">Student</option>
+                                <option value="faculty">Faculty</option>
+                                <option value="staff">Staff</option>
+                                <option value="admin">Administrator</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="signup-btn">Sign Up</button>
+
+                    <div class="signup-footer">
+                        Already have an account? <a href="#">Log In</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -335,6 +387,5 @@
             }
         }
     </script>
-    </div>
 </body>
 </html>
