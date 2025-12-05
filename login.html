@@ -60,33 +60,18 @@
         }
 
         .logo-circle {
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
-            border-radius: 50%;
+            width: 150px;
+            height: 150px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 4px solid rgba(255, 255, 255, 0.5);
             position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .logo-circle::before {
-            content: '';
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-        }
-
-        .logo-text-inner {
-            position: relative;
-            z-index: 1;
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .brand-title {
@@ -230,6 +215,7 @@
         @media (max-width: 768px) {
             .login-container {
                 flex-direction: column;
+                min-width: auto;
             }
 
             .login-left {
@@ -260,17 +246,8 @@
             }
 
             .logo-circle {
-                width: 100px;
-                height: 100px;
-            }
-
-            .logo-circle::before {
-                width: 75px;
-                height: 75px;
-            }
-
-            .logo-text-inner {
-                font-size: 24px;
+                width: 120px;
+                height: 120px;
             }
 
             .brand-title {
@@ -290,7 +267,7 @@
         <div class="login-left">
             <div class="logo-container">
                 <div class="logo-circle">
-                    <div class="logo-text-inner">SU</div>
+                    <img src="assets/img/SorSUlyap_logo.png" alt="SorSUlyap Logo">  
                 </div>
             </div>
             <h1 class="brand-title">SorSUlyap</h1>
