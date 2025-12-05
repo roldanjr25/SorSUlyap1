@@ -24,12 +24,12 @@
             padding: 20px;
         }
 
-       
+
         .cont {
-    
+
             background: white;
-            padding: 25px; 
-            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3); 
+            padding: 25px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
             max-width: 1000px;
             width: 100%;
         }
@@ -236,6 +236,44 @@
             }
         }
 
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #000;
+        }
+        .modal-content input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            font-size: 16px;
+        }
+
         @media (max-width: 480px) {
             .login-right {
                 padding: 30px 20px;
@@ -267,7 +305,7 @@
         <div class="login-left">
             <div class="logo-container">
                 <div class="logo-circle">
-                    <img src="assets/img/SorSUlyap_logo.png" alt="SorSUlyap Logo">  
+                    <img src="assets/img/SorSUlyap_logo.png" alt="SorSUlyap Logo">
                 </div>
             </div>
             <h1 class="brand-title">SorSUlyap</h1>
@@ -277,15 +315,15 @@
         <!-- Right Side - Login Form -->
         <div class="login-right">
             <h2 class="login-title">LOG IN</h2>
-            
+
             <form>
                 <div class="form-group">
                     <label class="form-label">SorSu Email</label>
                     <div class="input-wrapper">
                         <i class="fas fa-envelope input-icon"></i>
-                        <input 
-                            type="email" 
-                            class="form-input" 
+                        <input
+                            type="email"
+                            class="form-input"
                             placeholder="yourname@sorsu.edu.ph"
                             required
                         >
@@ -296,9 +334,9 @@
                     <label class="form-label">Password</label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock input-icon"></i>
-                        <input 
-                            type="password" 
-                            class="form-input" 
+                        <input
+                            type="password"
+                            class="form-input"
                             id="password"
                             placeholder="Enter password"
                             required
@@ -309,32 +347,50 @@
                     </div>
                 </div>
 
-                <button type="submit" class="login-btn">Login</button>
+                <button type="button" class="login-btn">Login</button>
 
                 <div class="login-footer">
                     <a href="#">Create an account</a>
                     <a href="#">Forgot Password?</a>
                 </div>
             </form>
+
+            <!-- OTP Modal -->
+            <div id="otpModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeOtpModal()">&times;</span>
+                    <h2>Verify Login</h2>
+                    <p>Enter the OTP sent to your email</p>
+                    <input type="text" id="otp-input" placeholder="Enter OTP" maxlength="6">
+                    <button type="button" id="verify-btn">Verify</button>
+                    <button type="button" onclick="resendOtp()">Resend OTP</button>
+                </div>
+            </div>
+
+            <!-- Forgot Password Modal -->
+            <div id="forgotModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeForgotModal()">&times;</span>
+                    <h2>Forgot Password</h2>
+                    <p>Enter your email to reset password</p>
+                    <input type="email" id="forgot-email" placeholder="yourname@sorsu.edu.ph">
+                    <button type="button" id="reset-btn">Send Reset OTP</button>
+                </div>
+            </div>
+
+            <!-- Reset OTP Modal -->
+            <div id="resetOtpModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeResetOtpModal()">&times;</span>
+                    <h2>Reset Password</h2>
+                    <p>Enter the OTP sent to your email and new password</p>
+                    <input type="text" id="reset-otp" placeholder="Enter OTP" maxlength="6">
+                    <input type="password" id="new-password" placeholder="New Password">
+                    <button type="button" id="reset-verify-btn">Reset Password</button>
+                </div>
+            </div>
         </div>
     </div>
-
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('toggleIcon');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
-        }
-    </script>
     </div>
 </body>
 </html>

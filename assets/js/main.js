@@ -531,7 +531,169 @@
     renderFeedback();
     attachFeedbackEvents();
 
-    applyRoleUI();
+  applyRoleUI();
   }
+
+// -----------------------------
+// Signup Page Scripts
+// -----------------------------
+const IS_SIGNUP_PAGE = document.querySelector('.signup-title');
+if (IS_SIGNUP_PAGE) {
+  function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      toggleIcon.classList.remove('fa-eye');
+      toggleIcon.classList.add('fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      toggleIcon.classList.remove('fa-eye-slash');
+      toggleIcon.classList.add('fa-eye');
+    }
+  }
+
+  // Role selection to show program for students
+  document.getElementById('role-select').addEventListener('change', function() {
+    const role = this.value;
+    const programGroup = document.getElementById('program-group');
+    const programSelect = document.getElementById('program-select');
+    if (role === 'student') {
+      programGroup.style.display = 'block';
+      programSelect.required = true;
+    } else {
+      programGroup.style.display = 'none';
+      programSelect.required = false;
+    }
+  });
+
+  // Add event listener to form
+  document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Simulate sending form data to backend and OTP
+    showOtpModal();
+  });
+
+  function showOtpModal() {
+    document.getElementById('otpModal').style.display = 'block';
+  }
+
+  function closeOtpModal() {
+    document.getElementById('otpModal').style.display = 'none';
+  }
+
+  function resendOtp() {
+    // Simulate resend
+    alert('OTP resent to your email');
+  }
+
+  // Event listener for verify button
+  document.getElementById('verify-btn').addEventListener('click', function() {
+    const otp = document.getElementById('otp-input').value;
+    if (otp === '123456') { // Simulate backend verification
+      closeOtpModal();
+      alert('Signup successful!');
+      // Redirect to login
+      window.location.href = 'login.html';
+    } else {
+      alert('Invalid OTP. Please try again.');
+    }
+  });
+}
+// -----------------------------
+// Login Page Scripts
+// -----------------------------
+const IS_LOGIN_PAGE = document.getElementById('login-form');
+if (IS_LOGIN_PAGE) {
+  function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      toggleIcon.classList.remove('fa-eye');
+      toggleIcon.classList.add('fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      toggleIcon.classList.remove('fa-eye-slash');
+      toggleIcon.classList.add('fa-eye');
+    }
+  }
+
+  // Login form submit event
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    // Simulate backend check - for demo, assume valid
+    showOtpModal(); // Send OTP
+  });
+
+  function showOtpModal() {
+    document.getElementById('otpModal').style.display = 'block';
+  }
+
+  function closeOtpModal() {
+    document.getElementById('otpModal').style.display = 'none';
+  }
+
+  function resendOtp() {
+    alert('OTP resent to your email');
+  }
+
+  // OTP verify for login
+  document.getElementById('verify-btn').addEventListener('click', function() {
+    const otp = document.getElementById('otp-input').value;
+    if (otp === '123456') { // Simulate
+      closeOtpModal();
+      // Store role (for demo, assume faculty)
+      localStorage.setItem('userRole', 'faculty'); // Change as needed
+      alert('Login successful!');
+      // Redirect to dashboard
+      window.location.href = 'index.html'; // or classSched.html
+    } else {
+      alert('Invalid OTP');
+    }
+  });
+
+  // Forgot password
+  function showForgotModal() {
+    document.getElementById('forgotModal').style.display = 'block';
+  }
+
+  function closeForgotModal() {
+    document.getElementById('forgotModal').style.display = 'none';
+  }
+
+  document.getElementById('reset-btn').addEventListener('click', function() {
+    const email = document.getElementById('forgot-email').value;
+    if (email) {
+      closeForgotModal();
+      showResetOtpModal();
+      // Simulate send reset OTP
+    } else {
+      alert('Enter email');
+    }
+  });
+
+  function showResetOtpModal() {
+    document.getElementById('resetOtpModal').style.display = 'block';
+  }
+
+  function closeResetOtpModal() {
+    document.getElementById('resetOtpModal').style.display = 'none';
+  }
+
+  document.getElementById('reset-verify-btn').addEventListener('click', function() {
+    const otp = document.getElementById('reset-otp').value;
+    const newPass = document.getElementById('new-password').value;
+    if (otp === '123456' && newPass) {
+      closeResetOtpModal();
+      alert('Password reset successful! Please log in.');
+    } else {
+      alert('Invalid OTP or missing new password');
+    }
+  });
+}
 
 })();
