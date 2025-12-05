@@ -158,4 +158,380 @@
     });
   });
 
+// -----------------------------
+  // Customer Service UI Behavior
+  // -----------------------------
+  const IS_CUSTOMER_PAGE = document.querySelector('#faq') || document.querySelector('#notification-center') || document.querySelector('#feedback');
+  if (IS_CUSTOMER_PAGE) {
+    // LocalStorage keys
+    const LS_KEYS = {
+      faqs: 'cs_faqs',
+      notifs: 'cs_notifs',
+      feedback: 'cs_feedback'
+    };
+
+    // Seed data if empty
+    function seedIfEmpty() {
+      if (!localStorage.getItem(LS_KEYS.faqs)) {
+        const seedFaqs = [
+          { id: cryptoRandom(), category: 'general', q: 'What is SorSUlyap?', a: 'SorSUlyap is a portal to keep students informed about schedules and announcements.' },
+          { id: cryptoRandom(), category: 'account', q: 'How do I reset my password?', a: 'Use the Forgot Password link on the login page to receive reset instructions.' },
+          { id: cryptoRandom(), category: 'technical', q: 'The page is not loading properly.', a: 'Try clearing your cache or using a different browser.' },
+          { id: cryptoRandom(), category: 'billing', q: 'Do I need to pay to access features?', a: 'Core features are free for students; some advanced tools may require permissions.' }
+        ];
+        localStorage.setItem(LS_KEYS.faqs, JSON.stringify(seedFaqs));
+      }
+      if (!localStorage.getItem(LS_KEYS.notifs)) {
+        const now = Date.now();
+        const seedNotifs = [
+          { id: cryptoRandom(), title: 'Welcome to SorSUlyap', message: 'Stay updated with your schedules and events.', ts: now - 86400000, read: false },
+          { id: cryptoRandom(), title: 'System Update', message: 'Maintenance scheduled this weekend.', ts: now - 3600000, read: false }
+        ];
+        localStorage.setItem(LS_KEYS.notifs, JSON.stringify(seedNotifs));
+      }
+      if (!localStorage.getItem(LS_KEYS.feedback)) {
+        localStorage.setItem(LS_KEYS.feedback, JSON.stringify([]));
+      }
+    }
+
+    function cryptoRandom() {
+      try { return crypto.getRandomValues(new Uint32Array(1))[0].toString(16) + Date.now().toString(16); }
+      catch { return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+    }
+
+    // Helpers to load/save
+    const load = (k) => JSON.parse(localStorage.getItem(k) || '[]');
+    const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+    // ---------------- FAQ -----------------
+    const faqAccordion = document.getElementById('faq-accordion');
+    const faqSearch = document.getElementById('faq-search');
+    const faqFilter = document.getElementById('faq-category-filter');
+    const faqAdminTBody = document.getElementById('faq-admin-tbody');
+    const faqAddBtn = document.getElementById('faq-add-btn');
+
+    function renderFaqs() {
+      const faqs = load(LS_KEYS.faqs);
+      const term = (faqSearch?.value || '').toLowerCase();
+      const category = faqFilter?.value || 'all';
+      const filtered = faqs.filter(f => {
+        const matchCat = category === 'all' || f.category === category;
+        const hay = (f.q + ' ' + f.a).toLowerCase();
+        const matchTerm = !term || hay.includes(term);
+        return matchCat && matchTerm;
+      });
+
+      if (faqAccordion) {
+        faqAccordion.innerHTML = filtered.map((f, idx) => `
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq-h-${f.id}">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-c-${f.id}" aria-expanded="false" aria-controls="faq-c-${f.id}">
+                <span class="badge bg-light text-dark me-2 text-uppercase">${f.category}</span> ${f.q}
+              </button>
+            </h2>
+            <div id="faq-c-${f.id}" class="accordion-collapse collapse" aria-labelledby="faq-h-${f.id}" data-bs-parent="#faq-accordion">
+              <div class="accordion-body">${escapeHtml(f.a)}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      if (faqAdminTBody) {
+        faqAdminTBody.innerHTML = faqs.map(f => `
+          <tr>
+            <td>
+              <select class="form-select form-select-sm" data-edit="category" data-id="${f.id}">
+                ${['general','account','technical','billing'].map(c=>`<option value="${c}" ${c===f.category?'selected':''}>${cap(c)}</option>`).join('')}
+              </select>
+            </td>
+            <td><input class="form-control form-control-sm" data-edit="q" data-id="${f.id}" value="${escapeAttr(f.q)}"></td>
+            <td><textarea class="form-control form-control-sm" rows="2" data-edit="a" data-id="${f.id}">${escapeHtml(f.a)}</textarea></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" data-action="delete" data-id="${f.id}"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+    function escapeHtml(s){ return (s||'').replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+    function escapeAttr(s){ return (s||'').replace(/["&<>]/g, c=>({"\"":"&quot;","&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+    function attachFaqEvents() {
+      faqSearch?.addEventListener('input', renderFaqs);
+      faqFilter?.addEventListener('change', renderFaqs);
+      faqAddBtn?.addEventListener('click', () => {
+        const faqs = load(LS_KEYS.faqs);
+        faqs.unshift({ id: cryptoRandom(), category: 'general', q: 'New question', a: 'Type the answer here.' });
+        save(LS_KEYS.faqs, faqs);
+        renderFaqs();
+      });
+      faqAdminTBody?.addEventListener('input', (e) => {
+        const el = e.target;
+        const id = el.getAttribute('data-id');
+        const field = el.getAttribute('data-edit');
+        if (!id || !field) return;
+        const faqs = load(LS_KEYS.faqs);
+        const idx = faqs.findIndex(x=>x.id===id);
+        if (idx>-1){ faqs[idx][field] = el.value; save(LS_KEYS.faqs, faqs); }
+      });
+      faqAdminTBody?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action="delete"]');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        let faqs = load(LS_KEYS.faqs);
+        faqs = faqs.filter(f=>f.id!==id);
+        save(LS_KEYS.faqs, faqs);
+        renderFaqs();
+      });
+    }
+
+    // -------------- Notifications ---------------
+    const notifList = document.getElementById('notif-list');
+    const notifFilter = document.getElementById('notif-filter');
+    const notifMarkAll = document.getElementById('notif-mark-all');
+    const bellBtn = document.querySelector('.header-right .icon-button .fa-bell')?.parentElement;
+
+    // Create dropdown container under bell
+    let notifDropdownEl;
+    function ensureBellDropdown() {
+      if (!bellBtn) return;
+      if (!notifDropdownEl) {
+        notifDropdownEl = document.createElement('div');
+        notifDropdownEl.className = 'position-absolute bg-white rounded-3 p-0 notif-dropdown d-none';
+        notifDropdownEl.style.right = '0';
+        notifDropdownEl.style.top = '120%';
+        notifDropdownEl.innerHTML = `<div class="list-group" id="notif-dropdown-list"></div>`;
+        bellBtn.style.position = 'relative';
+        bellBtn.appendChild(notifDropdownEl);
+      }
+    }
+
+    function unreadCount(notifs){ return notifs.filter(n=>!n.read).length; }
+
+    function renderBell() {
+      if (!bellBtn) return;
+      const notifs = load(LS_KEYS.notifs);
+      // Badge
+      let badge = bellBtn.querySelector('.position-absolute.translate-middle.badge');
+      const count = unreadCount(notifs);
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger';
+        badge.style.fontSize = '0.65rem';
+        bellBtn.appendChild(badge);
+      }
+      badge.textContent = count>99?'99+':String(count);
+      badge.style.display = count>0? 'inline-block' : 'none';
+
+      // Dropdown latest
+      ensureBellDropdown();
+      const dd = document.getElementById('notif-dropdown-list');
+      if (dd) {
+        const latest = [...notifs].sort((a,b)=>b.ts-a.ts).slice(0,6);
+        dd.innerHTML = latest.map(n=>`
+          <a href="#notification-center" class="list-group-item list-group-item-action ${n.read?'':'fw-semibold'}">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">${escapeHtml(n.title)}</h6>
+              <small class="text-muted">${timeAgo(n.ts)}</small>
+            </div>
+            <p class="mb-1">${escapeHtml(n.message)}</p>
+          </a>
+        `).join('') || '<div class="p-3 text-center text-muted">No notifications</div>';
+      }
+    }
+
+    function renderNotifCenter() {
+      if (!notifList) return;
+      const filter = notifFilter?.value || 'all';
+      let notifs = load(LS_KEYS.notifs).sort((a,b)=>b.ts-a.ts);
+      if (filter==='read') notifs = notifs.filter(n=>n.read);
+      if (filter==='unread') notifs = notifs.filter(n=>!n.read);
+      notifList.innerHTML = notifs.map(n=>`
+        <div class="list-group-item d-flex align-items-start justify-content-between ${n.read?'':'bg-light'}">
+          <div class="me-2">
+            <div class="fw-semibold">${escapeHtml(n.title)}</div>
+            <div class="small text-muted">${timeAgo(n.ts)}</div>
+            <div>${escapeHtml(n.message)}</div>
+          </div>
+          <div class="text-nowrap">
+            ${n.read?`<button class="btn btn-sm btn-outline-secondary" data-notif="unread" data-id="${n.id}">Mark Unread</button>`:`<button class="btn btn-sm btn-primary" data-notif="read" data-id="${n.id}">Mark Read</button>`}
+          </div>
+        </div>
+      `).join('') || '<div class="p-3 text-center text-muted">No notifications to show</div>';
+    }
+
+    function attachNotifEvents() {
+      notifFilter?.addEventListener('change', renderNotifCenter);
+      notifMarkAll?.addEventListener('click', ()=>{
+        const notifs = load(LS_KEYS.notifs).map(n=>({...n, read:true}));
+        save(LS_KEYS.notifs, notifs);
+        renderNotifCenter();
+        renderBell();
+      });
+      notifList?.addEventListener('click', (e)=>{
+        const btn = e.target.closest('[data-notif]');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        const action = btn.getAttribute('data-notif');
+        const notifs = load(LS_KEYS.notifs);
+        const idx = notifs.findIndex(n=>n.id===id);
+        if (idx>-1) {
+          notifs[idx].read = action==='read';
+          save(LS_KEYS.notifs, notifs);
+          renderNotifCenter();
+          renderBell();
+        }
+      });
+
+      // Bell toggle dropdown
+      bellBtn?.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        ensureBellDropdown();
+        notifDropdownEl?.classList.toggle('d-none');
+      });
+      document.addEventListener('click', ()=>{
+        notifDropdownEl?.classList.add('d-none');
+      });
+
+      // Admin create/schedule
+      const titleEl = document.getElementById('notif-title');
+      const msgEl = document.getElementById('notif-message');
+      const schedEl = document.getElementById('notif-schedule');
+      document.getElementById('notif-send-now')?.addEventListener('click', ()=>{
+        const t = (titleEl?.value||'').trim();
+        const m = (msgEl?.value||'').trim();
+        if (!t || !m) return;
+        const notifs = load(LS_KEYS.notifs);
+        notifs.unshift({ id: cryptoRandom(), title: t, message: m, ts: Date.now(), read: false });
+        save(LS_KEYS.notifs, notifs);
+        titleEl.value = '';
+        msgEl.value = '';
+        renderNotifCenter();
+        renderBell();
+        alert('Notification sent');
+      });
+      document.getElementById('notif-schedule-btn')?.addEventListener('click', ()=>{
+        const t = (titleEl?.value||'').trim();
+        const m = (msgEl?.value||'').trim();
+        const when = schedEl?.valueAsNumber || null;
+        if (!t || !m || !when) return;
+        const delay = Math.max(0, when - Date.now());
+        alert('Notification scheduled');
+        setTimeout(()=>{
+          const notifs = load(LS_KEYS.notifs);
+          notifs.unshift({ id: cryptoRandom(), title: t, message: m, ts: Date.now(), read: false });
+          save(LS_KEYS.notifs, notifs);
+          renderNotifCenter();
+          renderBell();
+        }, delay);
+        titleEl.value = '';
+        msgEl.value = '';
+        schedEl.value = '';
+      });
+    }
+
+    function timeAgo(ts){
+      const s = Math.floor((Date.now()-ts)/1000);
+      if (s<60) return `${s}s ago`;
+      const m = Math.floor(s/60); if (m<60) return `${m}m ago`;
+      const h = Math.floor(m/60); if (h<24) return `${h}h ago`;
+      const d = Math.floor(h/24); return `${d}d ago`;
+    }
+
+    // -------------- Feedback ---------------
+    const ratingStars = document.getElementById('rating-stars');
+    const commentEl = document.getElementById('feedback-comment');
+    const submitBtn = document.getElementById('feedback-submit');
+    const confirmEl = document.getElementById('feedback-confirm');
+    const feedbackList = document.getElementById('feedback-list');
+    const avgRatingEl = document.getElementById('avg-rating');
+
+    let currentRating = 0;
+    function setStars(n){
+      currentRating = n;
+      ratingStars?.querySelectorAll('.star').forEach(st => {
+        const v = Number(st.getAttribute('data-value'));
+        st.classList.toggle('inactive', v>n);
+      });
+    }
+
+    function attachFeedbackEvents(){
+      ratingStars?.addEventListener('mouseover', (e)=>{
+        const st = e.target.closest('.star'); if(!st) return;
+        setStars(Number(st.getAttribute('data-value')));
+      });
+      ratingStars?.addEventListener('click', (e)=>{
+        const st = e.target.closest('.star'); if(!st) return;
+        setStars(Number(st.getAttribute('data-value')));
+      });
+      ratingStars?.addEventListener('mouseleave', ()=>{ setStars(currentRating); });
+
+      submitBtn?.addEventListener('click', ()=>{
+        if (!currentRating) { alert('Please select a star rating.'); return; }
+        const text = (commentEl?.value||'').trim();
+        const items = load(LS_KEYS.feedback);
+        items.unshift({ id: cryptoRandom(), rating: currentRating, comment: text, ts: Date.now() });
+        save(LS_KEYS.feedback, items);
+        commentEl.value = '';
+        setStars(0);
+        renderFeedback();
+        if (confirmEl) { confirmEl.classList.remove('d-none'); setTimeout(()=>confirmEl.classList.add('d-none'), 2000); }
+      });
+    }
+
+    function renderFeedback(){
+      const items = load(LS_KEYS.feedback);
+      if (feedbackList) {
+        feedbackList.innerHTML = items.map(f=>`
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <div>${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div>
+              <small class="text-muted">${timeAgo(f.ts)}</small>
+            </div>
+            <div class="mt-1">${escapeHtml(f.comment || '')}</div>
+          </div>
+        `).join('') || '<div class="p-3 text-center text-muted">No feedback yet</div>';
+      }
+      if (avgRatingEl) {
+        const avg = items.length ? (items.reduce((s,x)=>s+x.rating,0)/items.length) : 0;
+        avgRatingEl.textContent = avg.toFixed(1);
+      }
+    }
+
+    // -------------- Role-based UI ---------------
+    const faqAdminCard = document.getElementById('faq-admin-card');
+    const notifAdminCard = document.getElementById('notif-admin-card');
+    const feedbackUserCard = document.getElementById('feedback-user-card');
+    const feedbackAdminCard = document.getElementById('feedback-admin-card');
+
+    function applyRoleUI(){
+      const role = (localStorage.getItem('current_user_role') || 'student').toLowerCase();
+      const isAdmin = role === 'admin';
+
+      // Admin-only
+      faqAdminCard && (faqAdminCard.style.display = isAdmin ? '' : 'none');
+      notifAdminCard && (notifAdminCard.style.display = isAdmin ? '' : 'none');
+      feedbackAdminCard && (feedbackAdminCard.style.display = isAdmin ? '' : 'none');
+
+      // User-only (students)
+      feedbackUserCard && (feedbackUserCard.style.display = isAdmin ? 'none' : '');
+    }
+
+    // Initialize
+    seedIfEmpty();
+    renderFaqs();
+    attachFaqEvents();
+
+    renderBell();
+    renderNotifCenter();
+    attachNotifEvents();
+
+    renderFeedback();
+    attachFeedbackEvents();
+
+    applyRoleUI();
+  }
+
 })();

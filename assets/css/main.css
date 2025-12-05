@@ -965,6 +965,56 @@ h6 {
 }
 
 /*--------------------------------------------------------------
+# Customer Service (Customer) Styles
+# Scoped to customer sections to avoid affecting other pages
+--------------------------------------------------------------*/
+:root { --cs-surface: #ffffff; --cs-border: rgba(0,0,0,.06); --cs-shadow: 0 8px 24px rgba(16,24,40,.06); --cs-radius: 12px; }
+
+.support-hero {
+  background: #ffffff;
+  border-radius: var(--cs-radius);
+  padding: 24px 20px;
+  box-shadow: 0 12px 28px rgba(16,24,40,.12);
+  border: 1px solid var(--cs-border);
+}
+
+#faq .card, #notification-center .card, #feedback .card { border: 1px solid var(--cs-border); border-radius: var(--cs-radius); box-shadow: 0 12px 28px rgba(16,24,40,.12); background: #ffffff; }
+#faq .card-header, #notification-center .card-header, #feedback .card-header { background: var(--cs-surface); border-bottom: 1px solid var(--cs-border); font-weight: 600; }
+#faq .accordion-item { border: 1px solid var(--cs-border); border-radius: 10px !important; overflow: hidden; box-shadow: 0 6px 14px rgba(16,24,40,.04); }
+#faq .accordion-button { padding: 14px 16px; }
+#faq .accordion-button:not(.collapsed) { background: #f7f9fc; box-shadow: inset 0 -1px 0 var(--cs-border); }
+
+#faq .form-control, #faq .form-select, #faq .input-group-text,
+#notification-center .form-control, #notification-center .form-select, #notification-center .input-group-text,
+#feedback .form-control, #feedback .form-select, #feedback .input-group-text { border-radius: 10px; border-color: var(--cs-border); }
+
+#faq .form-control:focus, #faq .form-select:focus,
+#notification-center .form-control:focus, #notification-center .form-select:focus,
+#feedback .form-control:focus, #feedback .form-select:focus { box-shadow: 0 0 0 .25rem rgba(13,110,253,.1); border-color: rgba(13,110,253,.3); }
+
+#faq .btn, #notification-center .btn, #feedback .btn { border-radius: 10px; }
+#notification-center .list-group-item { border-color: var(--cs-border); }
+
+/* Customer page spacing tweaks */
+#faq.section, #notification-center.section, #feedback.section { padding: 32px 0; }
+#faq .mt-4, #notification-center .mt-4 { margin-top: 16px !important; }
+#feedback .row.g-4 { --bs-gutter-x: 1rem; --bs-gutter-y: 1rem; }
+#faq .card, #notification-center .card, #feedback .card { margin-bottom: 12px; }
+
+.notif-dropdown { width: 360px; max-height: 420px; overflow:auto; box-shadow: var(--cs-shadow); border: 1px solid var(--cs-border); }
+.header-right .icon-button { position: relative; }
+.header-right .badge { pointer-events: none; }
+
+.chat-floating-btn { position: fixed; right: 20px; bottom: 20px; z-index: 1050; border-radius: 50%; width: 56px; height: 56px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 18px rgba(0,0,0,.2);}    
+.badge-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: .4rem; }
+.star { cursor: pointer; color: #ffc107; }
+.star.inactive { color: #e2e8f0; }
+.cursor-pointer{cursor:pointer}
+.max-h-300{ max-height: 300px; overflow:auto; }
+.table-fixed-head thead th { position: sticky; top: 0; background: #fff; z-index: 1; }
+.faq-admin .form-select, .faq-admin .form-control { min-height: 44px; }
+
+/*--------------------------------------------------------------
 # Global Page Titles & Breadcrumbs
 --------------------------------------------------------------*/
 .page-title {
@@ -8268,4 +8318,233 @@ section,
 --------------------------------------------------------------*/
 .starter-section {
   /* Add your styles here */
+}
+
+/*--------------------------------------------------------------
+# Customer Service Card Styles
+--------------------------------------------------------------*/
+.customer-service-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgb(236, 193, 193) 2%, rgb(197, 87, 87) 100%);
+  padding: 2rem 0;
+}
+
+.service-card {
+  max-width: 750px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.admin-header {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.admin-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-avatar i {
+  font-size: 2rem;
+  color: #d97b7b;
+}
+
+.admin-info h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.admin-info p {
+  margin: 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.card-content {
+  background: white;
+  padding: 2.5rem;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.welcome-section h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.welcome-section p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #5a6c7d;
+  margin-bottom: 0;
+}
+
+.attachments-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.section-title i {
+  font-size: 1.5rem;
+  color: #5a6c7d;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.attachment-item:hover {
+  background: #e9ecef;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.attachment-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffe5e5;
+  border-radius: 8px;
+}
+
+.file-icon i {
+  font-size: 1.5rem;
+  color: #dc3545;
+}
+
+.file-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.download-btn {
+  background: #dc8a8a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  background: #c97575;
+  transform: scale(1.05);
+}
+
+.download-btn i {
+  font-size: 1rem;
+}
+
+.announcement-section {
+  background: linear-gradient(135deg, #fce4e4 0%, #f5d5d5 100%);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.megaphone-icon {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(220, 138, 138, 0.3);
+  border-radius: 50%;
+}
+
+.megaphone-icon i {
+  font-size: 4rem;
+  color: #dc8a8a;
+}
+
+@media (max-width: 768px) {
+  .customer-service-container {
+    padding: 1rem;
+  }
+
+  .admin-header {
+    padding: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .attachment-item {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .announcement-section {
+    padding: 2rem 1rem;
+  }
+
+  .megaphone-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .megaphone-icon i {
+    font-size: 3rem;
+  }
 }
