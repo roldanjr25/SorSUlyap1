@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Log In - SorSUlyap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <!--Header Icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS File -->
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <style>
+        .cont {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px;
+        }
+        .login-container {
+            display: flex;
+            background-color: white;
+        }
+        .login-left {
+            background: linear-gradient(180deg, rgb(236, 193, 193) 2%, rgb(197, 87, 87) 100%);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            color: white;
+            text-align: center;
+        }
+        .logo-circle {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .brand-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .brand-tagline {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+        .login-right {
+            flex: 1;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        .login-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 14px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: rgb(227, 115, 115);
+            box-shadow: 0 0 0 3px rgba(232, 165, 165, 0.1);
+        }
+        .form-input::placeholder {
+            color: #bbb;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+        }
+        .password-toggle:hover {
+            color: #666;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: rgb(227, 115, 115);
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(232, 165, 165, 0.4);
+        }
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        .login-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            font-size: 14px;
+        }
+        .login-footer a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .login-footer a:hover {
+            color: #E8A5A5;
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+            .login-left {
+                padding: 40px 30px;
+            }
+            .login-right {
+                padding: 40px 30px;
+            }
+            .brand-title {
+                font-size: 28px;
+            }
+            .login-title {
+                font-size: 26px;
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cont">
+    <div class="login-container">
+        <!-- Left Side - Branding -->
+        <div class="login-left">
+            <div class="logo-circle">
+                <img src="../assets/img/SorSUlyap_logo.png" alt="SorSUlyap Logo">
+            </div>
+            <h1 class="brand-title">SorSUlyap</h1>
+            <p class="brand-tagline">Connecting Campus. Simplifying Information</p>
+        </div>
+
+        <!-- Right Side - Login Form -->
+        <div class="login-right">
+            <h2 class="login-title">ADMIN LOG IN</h2>
+
+            <form>
+                <div class="form-group">
+                    <label class="form-label">SorSu Email</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input
+                            type="email"
+                            class="form-input"
+                            placeholder="yourname@sorsu.edu.ph"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input
+                            type="password"
+                            class="form-input"
+                            id="password"
+                            placeholder="Enter password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">Log In</button>
+
+                <div class="login-footer">
+                    <a href="forgot_password.html">Forgot Password?</a>
+                    <a href="signup.html">Create an account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>
