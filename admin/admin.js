@@ -1,5 +1,3 @@
-// Admin JS - Combined scripts for all admin pages
-
 // Password toggle function (used in login, signup)
 function togglePassword() {
     const passwordInput = document.getElementById('password');
@@ -33,7 +31,7 @@ if (adminSignupForm) {
 }
 
 // Admin Login
-// (No specific script, just form submission)
+
 
 // Forgot Password
 const forgotForm = document.querySelector('.forgot-container form');
