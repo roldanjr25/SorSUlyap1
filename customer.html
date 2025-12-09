@@ -29,6 +29,8 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  
 
   
 </head>
@@ -60,175 +62,110 @@
 
 
   <main class="main">
+       
+    <div class="customer-container">
 
-    <!-- Page Title -->
-    <div class="page-title light-background">
-      <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">Customer Service</h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li class="current">Customer Service</li>
-          </ol>
-        </nav>
-      </div>
-    </div><!-- End Page Title -->
-
-    <!-- Support hero -->
-    <section class="section">
-      <div class="container">
-        <div class="support-hero d-flex flex-column flex-lg-row align-items-center gap-4">
-          <div class="flex-grow-1">
-            <h2 class="mb-2">How can we help?</h2>
-            <p class="mb-3">Search the FAQs, check notifications, or leave feedback. Admin tools are included below.</p>
-            <div class="row g-2">
-              <div class="col-12 col-md-6">
-                <a href="#faq" class="btn btn-primary w-100"><i class="bi bi-question-circle me-2"></i> FAQs</a>
-              </div>
-              <div class="col-12 col-md-6">
-                <a href="#notification-center" class="btn btn-outline-primary w-100"><i class="bi bi-bell me-2"></i> Notifications</a>
-              </div>
-            </div>
+    <!-- FAQ Hero Section -->
+    <section class="faq-hero-section">
+      <div class="faq-hero-wrapper">
+        <div class="faq-hero-content">
+          <h2 class="faq-hero-title">How can we help?</h2>
+          <p class="faq-hero-description">Search the FAQs, check notifications, or leave feedback. Admin tools are included below.</p>
+          <div class="faq-hero-buttons">
+            <a href="#faq" class="faq-hero-btn faq-hero-btn-primary">
+              <i class="bi bi-question-circle"></i> FAQs
+            </a>
+            <a href="#notification-center" class="faq-hero-btn faq-hero-btn-secondary">
+              <i class="bi bi-bell"></i> Notifications
+            </a>
           </div>
-          <div class="text-center">
-            <i class="bi bi-life-preserver display-4 text-primary"></i>
-          </div>
+        </div>
+        <div class="faq-hero-icon">
+          <i class="bi bi-life-preserver"></i>
         </div>
       </div>
     </section>
 
-    <!-- FAQ Module -->
-    <section id="faq" class="section">
-      <div class="container">
-        <div class="card">
-          <div class="card-header d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <span>Frequently Asked Questions</span>
-            <div class="d-flex gap-2 flex-wrap">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <input id="faq-search" type="text" class="form-control" placeholder="Search questions or answers...">
-              </div>
-              <select id="faq-category-filter" class="form-select" style="min-width:180px">
-                <option value="all">All Categories</option>
-                <option value="general">General</option>
-                <option value="account">Account</option>
-                <option value="technical">Technical</option>
-                <option value="billing">Billing</option>
-              </select>
+    <!-- FAQ Main Section -->
+    <section id="faq" class="faq-main-section">
+      <div class="faq-card">
+        <div class="faq-card-header">
+          <span class="faq-card-title">Frequently Asked Questions</span>
+          <div class="faq-controls">
+            <div class="faq-search-wrapper">
+              <span class="faq-search-icon"><i class="bi bi-search"></i></span>
+              <input id="faq-search" type="text" class="faq-search-input" placeholder="Search questions or answers...">
             </div>
-          </div>
-          <div class="card-body">
-            <div class="accordion" id="faq-accordion">
-              <!-- Populated by JS from localStorage seed -->
-            </div>
+            <select id="faq-category-filter" class="faq-category-select">
+              <option value="all">All Categories</option>
+              <option value="general">General</option>
+              <option value="account">Account</option>
+              <option value="technical">Technical</option>
+              <option value="billing">Billing</option>
+            </select>
           </div>
         </div>
+        <div class="faq-card-body">
+          <div class="faq-accordion" id="faq-accordion">
 
-        <!-- Admin: Manage FAQs -->
-        <div id="faq-admin-card" class="card mt-4 faq-admin">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>Admin - Manage FAQs</span>
-            <button id="faq-add-btn" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Add FAQ</button>
-          </div>
-          <div class="card-body">
-            <div class="table-responsive max-h-300 table-fixed-head">
-              <table class="table align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th style="width: 12rem">Category</th>
-                    <th>Question</th>
-                    <th style="width: 40%">Answer</th>
-                    <th class="text-end" style="width: 8rem">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="faq-admin-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Notification System -->
-    <section id="notification-center" class="section">
-      <div class="container">
-        <div class="card">
-          <div class="card-header d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <span>Notifications</span>
-            <div class="d-flex gap-2 flex-wrap">
-              <select id="notif-filter" class="form-select">
-                <option value="all">All</option>
-                <option value="unread">Unread</option>
-                <option value="read">Read</option>
-              </select>
-              <button id="notif-mark-all" class="btn btn-outline-secondary">Mark all as read</button>
-            </div>
-          </div>
-          <div class="list-group list-group-flush" id="notif-list"></div>
-        </div>
-
-        <!-- Admin: Create / Schedule Notification -->
-        <div id="notif-admin-card" class="card mt-4">
-          <div class="card-header">Admin - Create Notification</div>
-          <div class="card-body">
-            <div class="row g-3">
-              <div class="col-12 col-md-6">
-                <label class="form-label">Title</label>
-                <input id="notif-title" class="form-control" placeholder="e.g. System Maintenance">
-              </div>
-              <div class="col-12 col-md-6">
-                <label class="form-label">Schedule</label>
-                <input id="notif-schedule" type="datetime-local" class="form-control">
-              </div>
-              <div class="col-12">
-                <label class="form-label">Message</label>
-                <textarea id="notif-message" class="form-control" rows="3" placeholder="Notification details"></textarea>
-              </div>
-              <div class="col-12 d-flex gap-2">
-                <button id="notif-send-now" class="btn btn-primary"><i class="bi bi-send me-1"></i>Send Now</button>
-                <button id="notif-schedule-btn" class="btn btn-outline-primary"><i class="bi bi-clock me-1"></i>Schedule</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Feedback & Rating -->
-    <section id="feedback" class="section">
-      <div class="container">
-        <div class="row g-4">
-          <div class="col-lg-6">
-            <div id="feedback-user-card" class="card h-100">
-              <div class="card-header">Leave Feedback</div>
-              <div class="card-body">
-                <div class="mb-3">
-                  <label class="form-label">Your Rating</label>
-                  <div id="rating-stars" class="fs-4">
-                    <i data-value="1" class="bi bi-star-fill star inactive"></i>
-                    <i data-value="2" class="bi bi-star-fill star inactive"></i>
-                    <i data-value="3" class="bi bi-star-fill star inactive"></i>
-                    <i data-value="4" class="bi bi-star-fill star inactive"></i>
-                    <i data-value="5" class="bi bi-star-fill star inactive"></i>
-                  </div>
+            <!-- Sample FAQ Items -->
+            <div class="faq-accordion-item" data-category="general">
+              <button class="faq-accordion-button">
+                <div>
+                  <span class="faq-category-badge">General</span>
+                  <div>What is this platform about?</div>
                 </div>
-                <div class="mb-3">
-                  <label class="form-label">Comments</label>
-                  <textarea id="feedback-comment" class="form-control" rows="4" placeholder="Tell us about your experience"></textarea>
+                <i class="bi bi-chevron-down faq-accordion-icon"></i>
+              </button>
+              <div class="faq-accordion-content">
+                <div class="faq-accordion-body">
+                  This platform is designed to help you manage your activities, schedules, and stay connected with important updates. It provides a comprehensive solution for organizing your academic and professional life.
                 </div>
-                <button id="feedback-submit" class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i>Submit Feedback</button>
-                <div id="feedback-confirm" class="text-success mt-3 d-none"><i class="bi bi-check-circle me-1"></i>Thank you! Your feedback was submitted.</div>
               </div>
             </div>
-          </div>
-          <div class="col-lg-6">
-            <div id="feedback-admin-card" class="card h-100">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <span>Admin - Feedback Overview</span>
-                <span class="badge bg-warning text-dark"><span id="avg-rating">0.0</span> avg</span>
+
+            <div class="faq-accordion-item" data-category="account">
+              <button class="faq-accordion-button">
+                <div>
+                  <span class="faq-category-badge">Account</span>
+                  <div>How do I reset my password?</div>
+                </div>
+                <i class="bi bi-chevron-down faq-accordion-icon"></i>
+              </button>
+              <div class="faq-accordion-content">
+                <div class="faq-accordion-body">
+                  To reset your password, click on the "Forgot Password" link on the login page. Enter your email address, and we'll send you instructions to create a new password. Make sure to check your spam folder if you don't see the email.
+                </div>
               </div>
-              <div class="card-body">
-                <div id="feedback-list" class="list-group max-h-300"></div>
+            </div>
+
+            <div class="faq-accordion-item" data-category="technical">
+              <button class="faq-accordion-button">
+                <div>
+                  <span class="faq-category-badge">Technical</span>
+                  <div>What browsers are supported?</div>
+                </div>
+                <i class="bi bi-chevron-down faq-accordion-icon"></i>
+              </button>
+              <div class="faq-accordion-content">
+                <div class="faq-accordion-body">
+                  Our platform supports the latest versions of Chrome, Firefox, Safari, and Edge. For the best experience, we recommend keeping your browser updated to the latest version. Mobile browsers are also fully supported.
+                </div>
+              </div>
+            </div>
+
+            <div class="faq-accordion-item" data-category="billing">
+              <button class="faq-accordion-button">
+                <div>
+                  <span class="faq-category-badge">Billing</span>
+                  <div>How do I update my payment information?</div>
+                </div>
+                <i class="bi bi-chevron-down faq-accordion-icon"></i>
+              </button>
+              <div class="faq-accordion-content">
+                <div class="faq-accordion-body">
+                  You can update your payment information in the Account Settings section. Navigate to Billing & Payments, then click "Update Payment Method". All payment information is securely encrypted and processed through our payment provider.
+                </div>
               </div>
             </div>
           </div>
@@ -236,60 +173,153 @@
       </div>
     </section>
 
+    <!-- Feedback Section -->
+    <section id="feedback" class="feedback-section">
+      <div class="feedback-grid">
+        <!-- User Feedback Card -->
+        <div class="feedback-card">
+          <div class="feedback-card-header feedback-user-header">
+            Leave Feedback
+          </div>
+          <div class="feedback-card-body">
+            <div class="feedback-form-group">
+              <label class="feedback-label">Your Rating</label>
+              <div id="rating-stars" class="feedback-rating-stars">
+                <i data-value="1" class="bi bi-star-fill feedback-star inactive"></i>
+                <i data-value="2" class="bi bi-star-fill feedback-star inactive"></i>
+                <i data-value="3" class="bi bi-star-fill feedback-star inactive"></i>
+                <i data-value="4" class="bi bi-star-fill feedback-star inactive"></i>
+                <i data-value="5" class="bi bi-star-fill feedback-star inactive"></i>
+              </div>
+            </div>
+            <div class="feedback-form-group">
+              <label class="feedback-label">Comments</label>
+              <textarea id="feedback-comment" class="feedback-textarea" rows="4" placeholder="Tell us about your experience"></textarea>
+            </div>
+            <button id="feedback-submit" class="feedback-submit-btn">
+              <i class="bi bi-check2-circle"></i> Submit Feedback
+            </button>
+            <div id="feedback-confirm" class="feedback-success-message">
+              <i class="bi bi-check-circle"></i> Thank you! Your feedback was submitted.
+            </div>
+          </div>
+        </div>
+
+       
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // FAQ Accordion functionality
+    const accordionButtons = document.querySelectorAll('.faq-accordion-button');
+    accordionButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const content = button.nextElementSibling;
+        const isActive = button.classList.contains('active');
+        
+        // Close all accordions
+        accordionButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.nextElementSibling.classList.remove('active');
+        });
+        
+        // Open clicked accordion if it wasn't active
+        if (!isActive) {
+          button.classList.add('active');
+          content.classList.add('active');
+        }
+      });
+    });
+
+    // FAQ Search functionality
+    const searchInput = document.getElementById('faq-search');
+    const categoryFilter = document.getElementById('faq-category-filter');
+    const faqItems = document.querySelectorAll('.faq-accordion-item');
+
+    function filterFAQs() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const category = categoryFilter.value;
+
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-accordion-button').textContent.toLowerCase();
+        const answer = item.querySelector('.faq-accordion-body').textContent.toLowerCase();
+        const itemCategory = item.dataset.category;
+
+        const matchesSearch = question.includes(searchTerm) || answer.includes(searchTerm);
+        const matchesCategory = category === 'all' || itemCategory === category;
+
+        item.style.display = matchesSearch && matchesCategory ? 'block' : 'none';
+      });
+    }
+
+    searchInput.addEventListener('input', filterFAQs);
+    categoryFilter.addEventListener('change', filterFAQs);
+
+    // Star Rating functionality
+    const stars = document.querySelectorAll('.feedback-star');
+    let selectedRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.value);
+        updateStars();
+      });
+
+      star.addEventListener('mouseenter', () => {
+        const value = parseInt(star.dataset.value);
+        stars.forEach((s, index) => {
+          s.classList.toggle('active', index < value);
+          s.classList.toggle('inactive', index >= value);
+        });
+      });
+    });
+
+    document.getElementById('rating-stars').addEventListener('mouseleave', updateStars);
+
+    function updateStars() {
+      stars.forEach((s, index) => {
+        s.classList.toggle('active', index < selectedRating);
+        s.classList.toggle('inactive', index >= selectedRating);
+      });
+    }
+
+    // Feedback submission
+    document.getElementById('feedback-submit').addEventListener('click', () => {
+      const comment = document.getElementById('feedback-comment').value;
+      
+      if (selectedRating === 0) {
+        alert('Please select a rating');
+        return;
+      }
+
+      if (!comment.trim()) {
+        alert('Please enter your feedback');
+        return;
+      }
+
+      // Show success message
+      const successMsg = document.getElementById('feedback-confirm');
+      successMsg.classList.add('show');
+
+      // Clear form
+      document.getElementById('feedback-comment').value = '';
+      selectedRating = 0;
+      updateStars();
+
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        successMsg.classList.remove('show');
+      }, 3000);
+    });
+  </script>
+    
   </main>
-
-  <footer id="footer" class="footer accent-background">
-
-    <div class="container footer-top">
-      <div class="row gy-4">
-        <div class="col-lg-5 col-md-12 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Learner</span>
-          </a>
-          <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
-          <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
-          </div>
-        </div>
-
-        <div class="col-lg-2 col-6 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-          <h4>Contact Us</h4>
-          <p>Zone 8, Bulan, Sorsogon</p>
-          <p>Bulan, Sorsogon</p>
-          <p>Philippines</p>
-          <p class="mt-4"><strong>Phone:</strong> <span>+63 9624420155</span></p>
-          <p><strong>Email:</strong> <span>arianne.evasco@sorsu.edu.ph</span></p>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Learner</strong> <span>All Rights Reserved</span></p>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
-
-  </footer>
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
