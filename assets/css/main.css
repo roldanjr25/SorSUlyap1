@@ -164,7 +164,7 @@
             border-radius: 20px;
             padding: 30px;
             max-width: 700px;
-            margin: 50px auto;
+            margin: 10px auto 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
@@ -379,81 +379,6 @@ h6 {
     transform: rotate(360deg);
   }
 }
-
-/*--------------------------------------------------------------
-# Global Header
---------------------------------------------------------------*/
-
-/*.header {
-  --background-color: #ffffff;
-  --default-color: #ffffff;
-  --heading-color: #ffffff;
-  --accent-color: #2e80e4;
-  color: var(--default-color);
-  background-color: var(--background-color);
-  padding: 15px 0;
-  transition: all 0.5s;
-  z-index: 997;
-  
-}
-
-.header .logo {
-  line-height: 1;
-  
-}
-
-.header .logo img {
-  max-height: 36px;
-  margin-right: 8px;
-}
-
-.header .logo h1 {
-  font-size: 30px;
-  margin: 0;
-  font-weight: 700;
-  color: rgb(157, 61, 61);
-  text-decoration: none;
-}
-
-.header .btn-getstarted,
-.header .btn-getstarted:focus {
-  color: var(--contrast-color);
-  background: var(--accent-color);
-  font-size: 14px;
-  padding: 8px 25px;
-  margin: 0 0 0 30px;
-  border-radius: 50px;
-  transition: 0.3s;
-  border: 2px solid color-mix(in srgb, var(--contrast-color), transparent 90%);
-}
-
-.header .btn-getstarted:hover,
-.header .btn-getstarted:focus:hover {
-  color: var(--contrast-color);
-  background: color-mix(in srgb, var(--contrast-color), transparent 90%);
-}
-
-@media (max-width: 1200px) {
-  .header .logo {
-    order: 1;
-  }
-
-  .header .btn-getstarted {
-    order: 2;
-    margin: 0 15px 0 0;
-    padding: 6px 15px;
-  }
-
-  .header .navmenu {
-    order: 3;
-  }
-}
-
-.scrolled .header {
-  box-shadow: 0px 0 18px rgba(0, 0, 0, 0.1);
-}
-
-*/
 
 /*--------------------------------------------------------------
 # Navigation Menu
@@ -1574,8 +1499,8 @@ h6 {
             background: white;
             padding: 15px;
             border-radius: 10px;
-            margin: 0 auto 20px;
-            max-width: 300px;
+            margin: 15px auto 20px;
+            max-width: 87%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1948,7 +1873,7 @@ h6 {
         }
 
 
-        /*---------------Customer Service Page Styles--------------------*/
+/*---------------Customer Service Page Styles--------------------*/
 
         
   
@@ -1975,6 +1900,7 @@ h6 {
       align-items: center;
       gap: 2rem;
       flex-wrap: wrap;
+      margin-top: 15px;
     }
 
     .faq-hero-content {
