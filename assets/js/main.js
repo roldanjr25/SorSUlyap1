@@ -10,7 +10,7 @@
   "use strict";
 
   /**
-   * Apply .scrolled class to the body as the page is scrolled down
+   * Role management
    */
   function toggleScrolled() {
     const selectBody = document.querySelector('body');
@@ -44,26 +44,29 @@
           {
             id: cryptoRandom(),
             title: 'Welcome to SorSUlyap',
-            message: 'Stay updated with your schedules and announcements.',
+            message: 'Stay updated with your schedules and announcements. Learn more about our features.',
             timestamp: now - 86400000,
             read: false,
-            sender: 'Admin'
+            sender: 'Admin',
+            link: 'index.html#welcome'
           },
           {
             id: cryptoRandom(),
             title: 'System Maintenance',
-            message: 'Scheduled maintenance this weekend from 2 AM to 4 AM.',
+            message: 'Scheduled maintenance this weekend from 2 AM to 4 AM. Service might be interrupted.',
             timestamp: now - 3600000,
             read: false,
-            sender: 'Admin'
+            sender: 'Admin',
+            link: 'customer.html'
           },
           {
             id: cryptoRandom(),
             title: 'New Course Available',
-            message: 'Introduction to Computer Science is now open for enrollment.',
+            message: 'Introduction to Computer Science is now open for enrollment. Register today!',
             timestamp: now - 7200000,
             read: false,
-            sender: 'Admin'
+            sender: 'Admin',
+            link: 'classSched.html'
           }
         ];
         localStorage.setItem(LS_KEYS.notifs, JSON.stringify(seedNotifs));
@@ -103,13 +106,17 @@
             // Expose addTestNotification function globally
             window.addTestNotification = function() {
                 const notifs = load(LS_KEYS.notifs);
+                const testLinks = ['index.html', 'classSched.html', 'customer.html', 'calendar.html'];
+                const randomLink = testLinks[Math.floor(Math.random() * testLinks.length)];
+
                 notifs.unshift({
                     id: cryptoRandom(),
                     title: 'Test Notification ' + (notifs.length + 1),
-                    message: 'This is a test notification to demonstrate the functionality.',
+                    message: 'This is a test notification to demonstrate the functionality. Click to navigate to content.',
                     timestamp: Date.now(),
                     read: false,
-                    sender: 'System Test'
+                    sender: 'System Test',
+                    link: randomLink
                 });
                 save(LS_KEYS.notifs, notifs);
                 renderNotifications();
@@ -246,9 +253,17 @@
         const notificationId = dismissBtn.getAttribute('data-id');
         dismissNotification(notificationId);
       } else if (card) {
-        // Handle card click (mark as read)
+        // Handle card click (mark as read and navigate to notification link)
         const notificationId = card.getAttribute('data-id');
-        markAsRead(notificationId);
+        const notifs = load(LS_KEYS.notifs);
+        const notification = notifs.find(n => n.id === notificationId);
+
+        if (notification) {
+          markAsRead(notificationId);
+          // Navigate to notification's specific link, or notifications page as fallback
+          const targetLink = notification.link || 'notifications.html';
+          window.location.href = targetLink;
+        }
       }
     });
 
@@ -348,6 +363,41 @@
    * Initiate Pure Counter
    */
   new PureCounter();
+
+  /**
+   * Handle download buttons
+   */
+  document.querySelectorAll('.download-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      if (this.disabled) return; // Skip if disabled
+
+      // Find the attachment name
+      const attachmentItem = this.closest('.attachment-item');
+      const attachmentName = attachmentItem?.querySelector('.attachment-name')?.textContent || 'file.pdf';
+
+      // Show download feedback
+      showDownloadMessage(attachmentName);
+    });
+  });
+
+  function showDownloadMessage(filename) {
+    // Create a temporary message
+    const msg = document.createElement('div');
+    msg.className = 'download-message';
+    msg.innerHTML = `
+      <div style="position: fixed; top: 20px; right: 20px; background: #e8a5a5; color: white; padding: 10px 20px; border-radius: 5px; z-index: 10000; font-size: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+        <i class="fas fa-download"></i>
+        Downloading "${filename}"...
+        <br><small>The file will be saved to your downloads folder.</small>
+      </div>
+    `;
+    document.body.appendChild(msg);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      if (msg.parentNode) msg.parentNode.removeChild(msg);
+    }, 3000);
+  }
 
   /**
    * Init swiper sliders
