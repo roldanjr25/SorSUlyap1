@@ -21,14 +21,20 @@ const storage = multer.diskStorage({
 
 // File filter
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|pdf|doc|docx|xls|xlsx/;
+  // Expanded file types for educational schedules and documents
+  const allowedTypes = /jpeg|jpg|png|gif|bmp|webp|pdf|doc|docx|xls|xlsx|ppt|pptx|txt|rtf|odt|ods|csv|zip|rar|7z/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
+
+  // More comprehensive MIME type checking
+  const imageTypes = /image\/(jpeg|jpg|png|gif|bmp|webp)/;
+  const documentTypes = /application\/(pdf|msword|vnd\.openxmlformats|vnd\.ms|vnd\.oasis|zipped-shp)/;
+  const textTypes = /text\//;
+  const mimetype = imageTypes.test(file.mimetype) || documentTypes.test(file.mimetype) || textTypes.test(file.mimetype) || allowedTypes.test(file.mimetype);
 
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb(new Error('Invalid file type. Only images, PDFs, and documents are allowed.'));
+    cb(new Error('Invalid file type. Allowed: Images (jpg, png, gif, bmp, webp), Documents (PDF, Word, Excel, PowerPoint, ODT, ODS), and Archives (ZIP, RAR, 7Z). File not allowed.'));
   }
 };
 
