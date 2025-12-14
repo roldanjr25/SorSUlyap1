@@ -158,7 +158,7 @@ async function sendBasicAnnouncementNotification(announcementId, title) {
       const notificationInserts = users.map(user => {
         return db.query(
           'INSERT INTO User_Notification (Read_Status, UserID, NotificationID) VALUES (?, ?, ?)',
-          [FALSE, user.UserID, notificationId]
+          [false, user.UserID, notificationId]
         );
       });
       await Promise.all(notificationInserts);

@@ -233,9 +233,117 @@
   <script src="logout_popup.js"></script>
 
   <!-- Test notification functionality -->
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+
   <script>
+    // Load announcements dynamically
+    async function loadAnnouncements() {
+      const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+      if (!token) {
+        // If not logged in, keep the static welcome announcements
+        return;
+      }
+
+      try {
+        const announcements = await api.getAnnouncements();
+        if (announcements.success) {
+          displayAnnouncements(announcements.data);
+        }
+      } catch (error) {
+        console.error('Failed to load announcements:', error);
+        // Keep static announcements on error
+      }
+    }
+
+    function displayAnnouncements(announcements) {
+      const mainContent = document.querySelector('.main-content');
+
+      // Remove the static welcome section if it exists
+      const welcomeDiv = mainContent.querySelector('#welcome');
+      if (welcomeDiv) {
+        welcomeDiv.remove();
+      }
+
+      // Clear existing static announcement cards
+      const staticCards = mainContent.querySelectorAll('.announcement-card');
+      staticCards.forEach(card => card.remove());
+
+      // Create dynamic announcement cards
+      announcements.forEach(announcement => {
+        const announcementCard = document.createElement('div');
+        announcementCard.className = 'announcement-card';
+
+        const attachmentsHTML = announcement.attachments && announcement.attachments.length > 0
+          ? `
+            <div class="attachments-section">
+              <div class="attachments-title">
+                <i class="fas fa-download"></i>
+                Attachments
+              </div>
+              ${announcement.attachments.map(attachment => `
+                <div class="attachment-item">
+                  <div class="attachment-info">
+                    <i class="fas fa-file-pdf attachment-icon"></i>
+                    <span class="attachment-name">${attachment.File_Name}</span>
+                  </div>
+                  <button class="download-btn" onclick="downloadAttachment('${attachment.File_Path}')">
+                    <i class="fas fa-download"></i>
+                    Download
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+          `
+          : '';
+
+        announcementCard.innerHTML = `
+          <div class="admin-header">
+            <div class="admin-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="admin-info">
+              <h3>${announcement.Posted_by_Name || 'Admin'}</h3>
+              <p>Administrator</p>
+            </div>
+          </div>
+
+          <div class="card-content">
+            <h2 class="welcome-title">${announcement.Title || 'Announcement'}</h2>
+            <p class="welcome-text">${announcement.Content}</p>
+
+            ${attachmentsHTML}
+
+            <div class="announcement-illustration">
+              <i class="fas fa-bullhorn"></i>
+            </div>
+
+            <div class="announcement-meta">
+              <small class="text-muted">
+                Posted: ${new Date(announcement.Date_Posted).toLocaleDateString()}
+              </small>
+            </div>
+          </div>
+        `;
+
+        mainContent.appendChild(announcementCard);
+      });
+    }
+
+    function downloadAttachment(filePath) {
+      // Create a temporary link to download the file
+      const link = document.createElement('a');
+      link.href = '/uploads/' + filePath; // Adjust path as needed
+      link.download = filePath;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
     // Add a test notification button for demo
     document.addEventListener('DOMContentLoaded', function() {
+      loadAnnouncements(); // Load dynamic announcements
+
       setTimeout(() => {
         const existingBtn = document.querySelector('#test-notification-btn');
         if (!existingBtn) {

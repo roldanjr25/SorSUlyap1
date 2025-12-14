@@ -121,15 +121,99 @@
     </div>
 
     <script>
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+        const months = ['January', 'February', 'March', 'April', 'May', 'June',
                        'July', 'August', 'September', 'October', 'November', 'December'];
-        
+
         let currentMonth = 10; // November (0-indexed)
         let currentYear = 2025;
         let selectedDate = null;
         const today = new Date();
 
-        // Sample events data - you can add more events here
+        // Sample events data - keep original events
+        let eventsLoaded = false;
+
+        // Function to load real events from API
+        async function loadRealEvents() {
+            if (eventsLoaded) return; // Only load once
+
+            const token = localStorage.getItem(CONFIG?.TOKEN_KEY || 'token');
+            if (!token) {
+                console.log('No token found, skipping API events');
+                return; // Don't load if not logged in
+            }
+
+            try {
+                console.log('Loading real events from API...');
+                const response = await fetch(CONFIG.ENDPOINTS.EVENTS, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                console.log('API Response:', data);
+
+                if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+                    // Convert API events to calendar format
+                    const apiEvents = data.data.map(event => {
+                        console.log('Processing event:', event);
+                        // Handle the datetime-local format (2025-12-12T18:30)
+                        const dateTimeStr = event.Date || event.date;
+                        let eventDate;
+                        if (dateTimeStr) {
+                            eventDate = new Date(dateTimeStr);
+                            if (isNaN(eventDate.getTime())) {
+                                // If parsing failed, try to extract date part
+                                const datePart = dateTimeStr.split('T')[0];
+                                eventDate = new Date(datePart);
+                            }
+                        }
+
+                        console.log('Parsed date:', eventDate);
+
+                        return {
+                            date: eventDate ? eventDate.getDate() : 1,
+                            month: eventDate ? eventDate.getMonth() : 0,
+                            year: eventDate ? eventDate.getFullYear() : 2025,
+                            title: event.Event_Name || event.title || 'Untitled Event',
+                            time: event.Time ? formatTimeForCalendar(event.Time) : "TBD",
+                            location: event.Location || event.location || "TBD"
+                        };
+                    });
+
+                    console.log('Mapped API events:', apiEvents);
+
+                    // Merge with existing events
+                    window.sampleEvents = window.sampleEvents || events.slice(); // Keep original
+                    events.length = 0; // Clear events
+                    events.push(...window.sampleEvents, ...apiEvents); // Merge
+                    console.log('Final events array length:', events.length);
+
+                    // Re-render calendar if visible
+                    renderCalendar();
+                } else {
+                    console.log('No API events found or invalid response');
+                }
+            } catch (error) {
+                console.error('Error loading API events:', error);
+            } finally {
+                eventsLoaded = true;
+            }
+        }
+
+        function formatTimeForCalendar(timeString) {
+            if (!timeString) return "TBD";
+            try {
+                const [hours, minutes] = timeString.split(':');
+                const hour = parseInt(hours);
+                const ampm = hour >= 12 ? 'PM' : 'AM';
+                const displayHour = hour % 12 || 12;
+                return `${displayHour}:${minutes} ${ampm}`;
+            } catch (error) {
+                return timeString;
+            }
+        }
+
+        // Sample events data - keep original events
         const events = [
             {
                 date: 1,
@@ -376,7 +460,15 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="config.js"></script>
   <script src="profilepopup.js"></script>
+
+  <script>
+    // Load real events on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadRealEvents(); // Load dynamic events alongside sample events
+    });
+  </script>
 
 </body>
 
