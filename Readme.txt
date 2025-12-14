@@ -6,11 +6,11 @@ List of Fatures :
 
 Instructions :
 
-Technologies/Frameworks Used :
+Technologies/Frameworks Used :  
 
 Team Members :
-Roldan Bazares Jr - 
-Nicole Binalla -
-Arianne Evasco - 
-Lyza Gwen Guatno - 
-Lei Marvin Sanone -
+Roldan Bazares Jr - Frontend Developer
+Nicole Binalla - Documentation Specialist
+Arianne Evasco - Backend Developer
+Lyza Gwen Guatno - Quality Assurance 
+Lei Marvin Sanone - UI/UX Designer
