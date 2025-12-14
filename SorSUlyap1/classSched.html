@@ -27,8 +27,9 @@
   <!--Header Icons-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Main CSS File -->
+  <!-- Main JS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <script src="config.js"></script>
 
   
 </head>
@@ -154,6 +155,148 @@
     </div>
 
     <script>
+        // Load schedules from API
+        async function loadSchedules() {
+            const scheduleGrid = document.querySelector('.schedule-grid');
+            const token = localStorage.getItem(CONFIG?.TOKEN_KEY || 'token');
+
+            try {
+                console.log('Loading schedules from API...');
+                const response = await fetch(CONFIG.ENDPOINTS.SCHEDULES, {
+                    headers: token ? {
+                        'Authorization': `Bearer ${token}`
+                    } : {}
+                });
+
+                const data = await response.json();
+                console.log('Schedules API response:', data);
+
+                if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+                    // Clear static cards and add dynamic ones
+                    scheduleGrid.innerHTML = '';
+                    data.data.forEach(schedule => {
+                        const scheduleCard = createScheduleCard(schedule);
+                        scheduleGrid.appendChild(scheduleCard);
+                    });
+                    console.log('Loaded', data.data.length, 'schedules from database');
+                } else {
+                    console.log('No schedules found, showing sample schedules');
+                    // Show a message or keep some static ones if no schedules exist
+                    addNoSchedulesMessage(scheduleGrid);
+                }
+            } catch (error) {
+                console.error('Failed to load schedules:', error);
+                // On error, show sample schedules
+                console.log('Error loading schedules, showing sample schedules');
+            }
+        }
+
+        function createScheduleCard(schedule) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'schedule-card';
+
+            // Check if the uploaded file is an image
+            const isImage = schedule.File_Name && /\.(jpe?g|png|gif|bmp|webp)$/i.test(schedule.File_Name);
+            let imageSrc;
+
+            if (isImage && schedule.File_Path) {
+                // Extract just the filename (File_Path contains 'uploads\\filename.jpg')
+                const fileName = schedule.File_Path.split(/[/\\]/).pop(); // Get last part after split
+                imageSrc = '/uploads/' + fileName;
+                console.log('Using uploaded image:', imageSrc, 'from:', schedule.File_Path);
+            } else {
+                // Generate SVG placeholder for non-image files (PDF, Word, etc.)
+                const svgText = encodeURIComponent(`
+                    <svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'>
+                        <rect width='400' height='300' fill='#f0f0f0'/>
+                        <text x='50%' y='35%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='14' fill='#666'>📄</text>
+                        <text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='12' fill='#666'>${schedule.Title}</text>
+                        <text x='50%' y='75%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='10' fill='#999'>${getFileExtension(schedule.File_Name) || 'File'}</text>
+                    </svg>
+                `);
+                imageSrc = `data:image/svg+xml,${svgText}`;
+            }
+
+            cardDiv.innerHTML = `
+                <img src="${imageSrc}"
+                     alt="${schedule.Title}"
+                     class="schedule-image"
+                     onclick="showDetail('${schedule.Title}')"
+                     onerror="handleImageError(this)"
+                     onload="console.log('Image loaded successfully:', '${imageSrc}')">
+                <div class="schedule-title">${schedule.Title}</div>
+                <div class="schedule-subtitle">${getProgramDisplayName(schedule.Program)} ${getYearDisplay(schedule.YearLevel)}${schedule.Section ? ' - ' + schedule.Section : ''}</div>
+                <div class="button-group">
+                    <button class="btn btn-view" onclick="showDetail('${schedule.Title}')">View</button>
+                    <button class="btn btn-download" onclick="downloadSchedule('${schedule.File_Path}', '${schedule.File_Name}')">Download</button>
+                </div>
+            `;
+
+            return cardDiv;
+        }
+
+        function getFileExtension(filename) {
+            return filename ? filename.split('.').pop().toUpperCase() : 'FILE';
+        }
+
+        function handleImageError(img) {
+            // Fallback to SVG if image fails to load
+            const svgText = encodeURIComponent(`
+                <svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'>
+                    <rect width='400' height='300' fill='#f0f0f0'/>
+                    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='14' fill='#666'>📄 File</text>
+                </svg>
+            `);
+            img.src = `data:image/svg+xml,${svgText}`;
+        }
+
+        function getProgramDisplayName(program) {
+            const programNames = {
+                'ITE': 'Information Technology Education',
+                'BTVRM': 'Business Technology Vocational Rizal Memorial',
+                'ABA': 'Applied Business Administration',
+                'Educ': 'Education'
+            };
+            return programNames[program] || program || 'General Department';
+        }
+
+        function getYearDisplay(yearLevel) {
+            if (!yearLevel) return '';
+            if (yearLevel === '1') return '1st Year';
+            if (yearLevel === '2') return '2nd Year';
+            if (yearLevel === '3') return '3rd Year';
+            if (yearLevel === '4') return '4th Year';
+            return yearLevel;
+        }
+
+        function downloadSchedule(filePath, fileName) {
+            if (filePath && fileName) {
+                // Extract just the filename from the file path
+                const actualFileName = filePath.split(/[/\\]/).pop();
+                // Create a temporary link to download the file
+                const link = document.createElement('a');
+                link.href = '/uploads/' + actualFileName;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert('File not available for download');
+            }
+        }
+
+        function addNoSchedulesMessage(container) {
+            if (container.querySelectorAll('.schedule-card').length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #666;">
+                        <i class="fas fa-calendar-alt" style="font-size: 3em; margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3>No Schedules Available</h3>
+                        <p>Schedules will appear here once faculty upload them.</p>
+                    </div>
+                `;
+            }
+        }
+
         function showDetail(title) {
             document.getElementById('gridView').style.display = 'none';
             document.getElementById('detailView').classList.add('active');
@@ -166,6 +309,11 @@
             document.getElementById('detailView').classList.remove('active');
             window.scrollTo(0, 0);
         }
+
+        // Load schedules when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSchedules();
+        });
     </script>
 
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faculty Dashboard - SorSUlyap</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
     <link href="assets/css/main.css" rel="stylesheet">
 
     <style>
@@ -461,7 +461,7 @@
 
                     <div class="form-group">
                         <label for="schedule-department">Department/Program</label>
-                        <select id="schedule-department" name="department" class="form-input" required>
+                        <select id="schedule-department" name="program" class="form-input" required>
                             <option value="ITE">ITE Department</option>
                             <option value="BTVRM">BTVRM Department</option>
                             <option value="ABA">ABA Department</option>
@@ -471,9 +471,43 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="schedule-yrlevel">Year Level</label>
+                        <select id="schedule-yrlevel" name="yearLevel" class="form-input">
+                            <option value="">All Years</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-section">Section (Optional)</label>
+                        <input type="text" id="schedule-section" name="section" class="form-input" placeholder="e.g., Section A">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-semester">Semester</label>
+                        <select id="schedule-semester" name="semester" class="form-input" required>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="Summer">Summer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-academicyear">Academic Year</label>
+                        <select id="schedule-academicyear" name="academicYear" class="form-input" required>
+                            <option value="2024-2025">2024-2025</option>
+                            <option value="2025-2026">2025-2026</option>
+                            <option value="2026-2027">2026-2027</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="schedule-file">Schedule File</label>
-                        <input type="file" id="schedule-file" name="file" class="form-input form-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png" required>
-                        <small style="color: #666;">Supported: PDF, Word, Excel, Images</small>
+                        <input type="file" id="schedule-file" name="file" class="form-input form-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.ppt,.pptx,.txt,.rtf,.zip,.rar,.7z" required>
+                        <small style="color: #666;">Supported: PDF, Word, Excel, PowerPoint, Images, Archives</small>
                     </div>
 
                     <button type="submit" class="submit-btn" id="schedule-submit">
