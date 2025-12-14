@@ -31,6 +31,57 @@
   <link href="assets/css/main.css" rel="stylesheet">
   <script src="config.js"></script>
 
+  <style>
+    #gridView {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .schedule-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      justify-items: center;
+    }
+
+    .schedule-card {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    #detailView {
+      display: none !important;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    #detailView.active {
+      display: block !important;
+    }
+
+    .detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .detail-image-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .download-btn-container {
+      display: flex;
+      justify-content: center;
+    }
+  </style>
   
 </head>
 
