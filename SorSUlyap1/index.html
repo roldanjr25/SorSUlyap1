@@ -242,19 +242,13 @@
       const token = localStorage.getItem(CONFIG.TOKEN_KEY);
       if (!token) {
         // If not logged in, keep the static welcome announcements
-        console.log('No token found, keeping static announcements');
         return;
       }
 
       try {
-        console.log('Loading announcements from API...');
         const announcements = await api.getAnnouncements();
-        console.log('Announcements response:', announcements);
-        
-        if (announcements.success && Array.isArray(announcements.data) && announcements.data.length > 0) {
+        if (announcements.success) {
           displayAnnouncements(announcements.data);
-        } else {
-          console.log('No announcements found, keeping static announcements');
         }
       } catch (error) {
         console.error('Failed to load announcements:', error);
@@ -291,9 +285,9 @@
                 <div class="attachment-item">
                   <div class="attachment-info">
                     <i class="fas fa-file-pdf attachment-icon"></i>
-                    <span class="attachment-name">${attachment.File_Name || 'File'}</span>
+                    <span class="attachment-name">${attachment.File_Name}</span>
                   </div>
-                  <button class="download-btn" onclick="downloadAttachment('${attachment.File_Path}', '${attachment.File_Name}')">
+                  <button class="download-btn" onclick="downloadAttachment('${attachment.File_Path}')">
                     <i class="fas fa-download"></i>
                     Download
                   </button>
@@ -309,8 +303,8 @@
               <i class="fas fa-user"></i>
             </div>
             <div class="admin-info">
-              <h3>${announcement.Posted_by_Name || 'Faculty'}</h3>
-              <p>${announcement.Target_Audience || 'Announcement'}</p>
+              <h3>${announcement.Posted_by_Name || 'Admin'}</h3>
+              <p>Administrator</p>
             </div>
           </div>
 
@@ -334,21 +328,105 @@
 
         mainContent.appendChild(announcementCard);
       });
+
+      // Create notifications for new announcements
+      createNotificationsFromAnnouncements(announcements);
     }
 
-    function downloadAttachment(filePath, fileName) {
-      if (!filePath) {
-        alert('File path not available');
-        return;
+    function createNotificationsFromAnnouncements(announcements) {
+      // Only create notifications if we have access to notification functions
+      if (!window.cryptoRandom || !window.renderNotifications) return;
+
+      const LS_KEY = 'cs_notifs';
+      const currentNotifs = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+
+      announcements.forEach(announcement => {
+        // Check if notification already exists for this announcement (by title)
+        const existingNotif = currentNotifs.find(n => n.title === announcement.Title);
+
+        if (!existingNotif) {
+          // Create new notification
+          const notifs = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+
+          // Create a unique ID for the notification
+          const notifId = window.cryptoRandom
+            ? window.cryptoRandom()
+            : Math.random().toString(16).slice(2) + Date.now().toString(16);
+
+          notifs.unshift({
+            id: notifId,
+            title: announcement.Title || 'New Announcement',
+            message: (announcement.Content || 'Please check the new announcement.').substring(0, 120) +
+                     (announcement.Content && announcement.Content.length > 120 ? '...' : ''),
+            timestamp: new Date(announcement.Date_Posted).getTime() || Date.now(),
+            read: false,
+            sender: announcement.Posted_by_Name || 'Admin',
+            link: 'index.html'
+          });
+
+          localStorage.setItem(LS_KEY, JSON.stringify(notifs));
+
+          console.log('Created notification for announcement:', announcement.Title);
+        }
+      });
+
+      // Update notification display after adding new ones
+      if (window.renderNotifications) {
+        window.renderNotifications();
       }
-      // Create a temporary link to download the file
-      const link = document.createElement('a');
-      const actualFileName = filePath.split(/[/\\]/).pop();
-      link.href = '/uploads/' + actualFileName;
-      link.download = fileName || actualFileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    }
+
+    async function downloadAttachment(filePath) {
+      try {
+        // Get authentication token
+        const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+        if (!token) {
+          alert('You must be logged in to download attachments.');
+          return;
+        }
+
+        // Make authenticated request to download endpoint
+        const response = await fetch('/uploads/' + filePath, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `Download failed: ${response.status}`);
+        }
+
+        // Get filename from response headers or use original filename
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = filePath;
+        if (contentDisposition) {
+          const matches = contentDisposition.match(/filename="([^"]*)"/);
+          if (matches && matches[1]) {
+            filename = matches[1];
+          }
+        }
+
+        // Create blob from response
+        const blob = await response.blob();
+
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+      } catch (error) {
+        console.error('Download error:', error);
+        alert('Failed to download file: ' + error.message);
+      }
     }
 
     // Add a test notification button for demo

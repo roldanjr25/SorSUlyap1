@@ -3,6 +3,9 @@ const cors = require('cors');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const http = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config({ path: __dirname + '/.env' });
 
 // Import route modules
@@ -12,7 +15,7 @@ const scheduleRoutes = require('./routes/schedules');
 const announcementRoutes = require('./routes/announcements');
 const eventRoutes = require('./routes/events');
 const notificationRoutes = require('./routes/notifications');
-// const offlineRoutes = require('./routes/offline'); // Temporarily disabled
+const offlineRoutes = require('./routes/offline'); // ✅ Enabled for offline demo
 
 const app = express();
 
@@ -21,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static file serving for uploads (schedule images, etc.)
+// Static file serving for uploads (schedule images, etc.) - keep for internal access
 const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -49,6 +52,37 @@ pool.getConnection()
 // Import middleware
 const { protect, authorize } = require('./middleware/auth');
 
+// Override /uploads with protected route for downloads
+app.get('/uploads/:filename', protect, (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, 'uploads', filename);
+
+  // Validate file path to prevent directory traversal
+  const normalizedPath = path.normalize(filePath);
+  const uploadsDir = path.normalize(path.join(__dirname, 'uploads'));
+
+  if (!normalizedPath.startsWith(uploadsDir)) {
+    return res.status(403).json({ success: false, message: 'Access denied' });
+  }
+
+  // Check if file exists
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ success: false, message: 'File not found' });
+  }
+
+  // Set headers and stream file
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.setHeader('Content-Type', 'application/octet-stream');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error sending file:', err);
+      if (!res.headersSent) {
+        res.status(500).json({ success: false, message: 'Error downloading file' });
+      }
+    }
+  });
+});
+
 // ============================================
 // ROUTES
 // ============================================
@@ -69,7 +103,7 @@ app.use('/api/schedules', scheduleRoutes);
 app.use('/api/announcements', announcementRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/notifications', notificationRoutes);
-// app.use('/api/offline', offlineRoutes); // Temporarily disabled
+app.use('/api/offline', offlineRoutes); // ✅ Enabled for offline demo
 
 // ============================================
 // ERROR HANDLERS

@@ -45,9 +45,72 @@ if (forgotForm) {
 // Announcement Post Form
 const postForm = document.getElementById('postForm');
 if (postForm) {
-    postForm.addEventListener('submit', function(e) {
+    postForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        alert('Post created successfully!');
+
+        try {
+            // Get form values
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+            const attachmentsInput = document.getElementById('attachments');
+
+            if (!title || !content) {
+                alert('Please fill in all required fields (Title and Content)');
+                return;
+            }
+
+            // Get attached files
+            const files = attachmentsInput.files;
+            const fileList = Array.from(files);
+
+            // Validate files (optional - backend will also validate)
+            const maxFileSize = 5 * 1024 * 1024; // 5MB
+            const invalidFiles = fileList.filter(file => file.size > maxFileSize);
+            if (invalidFiles.length > 0) {
+                alert(`Some files exceed the 5MB size limit: ${invalidFiles.map(f => f.name).join(', ')}`);
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = postForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating Announcement...';
+
+            // Prepare announcement data
+            const announcementData = {
+                title: title,
+                content: content,
+                files: fileList
+            };
+
+            // Submit to API
+            const response = await api.createAnnouncement(announcementData);
+
+            if (response.success) {
+                alert(`Announcement "${title}" created successfully${fileList.length > 0 ? ` with ${fileList.length} attachment(s)` : ''}!`);
+
+                // Reset form
+                postForm.reset();
+
+                // Optionally refresh the page to show new announcement
+                // window.location.reload();
+
+            } else {
+                throw new Error(response.message || 'Failed to create announcement');
+            }
+
+        } catch (error) {
+            console.error('Announcement creation error:', error);
+            alert(`Failed to create announcement: ${error.message}`);
+        } finally {
+            // Reset button
+            const submitBtn = postForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Post';
+            }
+        }
     });
 }
 

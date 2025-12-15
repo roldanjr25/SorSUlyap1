@@ -3,7 +3,7 @@ const db = require('../config/database');
 // @desc    Sync data for offline use
 // @route   POST /api/offline/sync
 // @access  Private
-exports.syncData = async (req, res) => {
+const syncData = async (req, res) => {
   try {
     const userId = req.user.UserID;
     const userRole = req.user.Role;
@@ -136,7 +136,7 @@ exports.syncData = async (req, res) => {
 // @desc    Queue offline actions
 // @route   POST /api/offline/queue
 // @access  Private
-exports.queueAction = async (req, res) => {
+const queueAction = async (req, res) => {
   try {
     const { actions } = req.body;
     const results = [];
@@ -199,7 +199,7 @@ exports.queueAction = async (req, res) => {
 // @desc    Check server status for offline mode
 // @route   GET /api/offline/status
 // @access  Public
-exports.checkStatus = async (req, res) => {
+const checkStatus = async (req, res) => {
   try {
     // Simple database ping
     await db.query('SELECT 1');
