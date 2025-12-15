@@ -334,6 +334,52 @@
 
         mainContent.appendChild(announcementCard);
       });
+
+      // Create notifications for new announcements
+      createNotificationsFromAnnouncements(announcements);
+    }
+
+    function createNotificationsFromAnnouncements(announcements) {
+      // Only create notifications if we have access to notification functions
+      if (!window.cryptoRandom || !window.renderNotifications) return;
+
+      const LS_KEY = 'cs_notifs';
+      const currentNotifs = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+
+      announcements.forEach(announcement => {
+        // Check if notification already exists for this announcement (by title)
+        const existingNotif = currentNotifs.find(n => n.title === announcement.Title);
+
+        if (!existingNotif) {
+          // Create new notification
+          const notifs = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+
+          // Create a unique ID for the notification
+          const notifId = window.cryptoRandom
+            ? window.cryptoRandom()
+            : Math.random().toString(16).slice(2) + Date.now().toString(16);
+
+          notifs.unshift({
+            id: notifId,
+            title: announcement.Title || 'New Announcement',
+            message: (announcement.Content || 'Please check the new announcement.').substring(0, 120) +
+                     (announcement.Content && announcement.Content.length > 120 ? '...' : ''),
+            timestamp: new Date(announcement.Date_Posted).getTime() || Date.now(),
+            read: false,
+            sender: announcement.Posted_by_Name || 'Admin',
+            link: 'index.html'
+          });
+
+          localStorage.setItem(LS_KEY, JSON.stringify(notifs));
+
+          console.log('Created notification for announcement:', announcement.Title);
+        }
+      });
+
+      // Update notification display after adding new ones
+      if (window.renderNotifications) {
+        window.renderNotifications();
+      }
     }
 
     function downloadAttachment(filePath, fileName) {

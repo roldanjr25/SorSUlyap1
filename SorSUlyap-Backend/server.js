@@ -12,7 +12,7 @@ const scheduleRoutes = require('./routes/schedules');
 const announcementRoutes = require('./routes/announcements');
 const eventRoutes = require('./routes/events');
 const notificationRoutes = require('./routes/notifications');
-// const offlineRoutes = require('./routes/offline'); // Temporarily disabled
+const offlineRoutes = require('./routes/offline'); // ✅ Enabled for offline demo
 
 const app = express();
 
@@ -69,7 +69,7 @@ app.use('/api/schedules', scheduleRoutes);
 app.use('/api/announcements', announcementRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/notifications', notificationRoutes);
-// app.use('/api/offline', offlineRoutes); // Temporarily disabled
+app.use('/api/offline', offlineRoutes); // ✅ Enabled for offline demo
 
 // ============================================
 // ERROR HANDLERS
