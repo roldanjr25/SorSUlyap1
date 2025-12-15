@@ -242,19 +242,13 @@
       const token = localStorage.getItem(CONFIG.TOKEN_KEY);
       if (!token) {
         // If not logged in, keep the static welcome announcements
-        console.log('No token found, keeping static announcements');
         return;
       }
 
       try {
-        console.log('Loading announcements from API...');
         const announcements = await api.getAnnouncements();
-        console.log('Announcements response:', announcements);
-        
-        if (announcements.success && Array.isArray(announcements.data) && announcements.data.length > 0) {
+        if (announcements.success) {
           displayAnnouncements(announcements.data);
-        } else {
-          console.log('No announcements found, keeping static announcements');
         }
       } catch (error) {
         console.error('Failed to load announcements:', error);
@@ -291,9 +285,9 @@
                 <div class="attachment-item">
                   <div class="attachment-info">
                     <i class="fas fa-file-pdf attachment-icon"></i>
-                    <span class="attachment-name">${attachment.File_Name || 'File'}</span>
+                    <span class="attachment-name">${attachment.File_Name}</span>
                   </div>
-                  <button class="download-btn" onclick="downloadAttachment('${attachment.File_Path}', '${attachment.File_Name}')">
+                  <button class="download-btn" onclick="downloadAttachment('${attachment.File_Path}')">
                     <i class="fas fa-download"></i>
                     Download
                   </button>
@@ -309,8 +303,8 @@
               <i class="fas fa-user"></i>
             </div>
             <div class="admin-info">
-              <h3>${announcement.Posted_by_Name || 'Faculty'}</h3>
-              <p>${announcement.Target_Audience || 'Announcement'}</p>
+              <h3>${announcement.Posted_by_Name || 'Admin'}</h3>
+              <p>Administrator</p>
             </div>
           </div>
 
@@ -382,19 +376,57 @@
       }
     }
 
-    function downloadAttachment(filePath, fileName) {
-      if (!filePath) {
-        alert('File path not available');
-        return;
+    async function downloadAttachment(filePath) {
+      try {
+        // Get authentication token
+        const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+        if (!token) {
+          alert('You must be logged in to download attachments.');
+          return;
+        }
+
+        // Make authenticated request to download endpoint
+        const response = await fetch('/uploads/' + filePath, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `Download failed: ${response.status}`);
+        }
+
+        // Get filename from response headers or use original filename
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = filePath;
+        if (contentDisposition) {
+          const matches = contentDisposition.match(/filename="([^"]*)"/);
+          if (matches && matches[1]) {
+            filename = matches[1];
+          }
+        }
+
+        // Create blob from response
+        const blob = await response.blob();
+
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+      } catch (error) {
+        console.error('Download error:', error);
+        alert('Failed to download file: ' + error.message);
       }
-      // Create a temporary link to download the file
-      const link = document.createElement('a');
-      const actualFileName = filePath.split(/[/\\]/).pop();
-      link.href = '/uploads/' + actualFileName;
-      link.download = fileName || actualFileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
     }
 
     // Add a test notification button for demo

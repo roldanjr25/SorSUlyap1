@@ -368,15 +368,92 @@
    * Handle download buttons
    */
   document.querySelectorAll('.download-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
+    btn.addEventListener('click', async function(e) {
       if (this.disabled) return; // Skip if disabled
 
-      // Find the attachment name
+      // Prevent default behavior
+      e.preventDefault();
+
+      // Find the attachment item and get file path
       const attachmentItem = this.closest('.attachment-item');
       const attachmentName = attachmentItem?.querySelector('.attachment-name')?.textContent || 'file.pdf';
 
-      // Show download feedback
-      showDownloadMessage(attachmentName);
+      // Find file path from onclick attribute or data attribute
+      let filePath = null;
+      if (this.onclick) {
+        // Extract file path from onclick attribute
+        const onclickStr = this.onclick.toString();
+        const match = onclickStr.match(/downloadAttachment\('([^']+)'\)/);
+        if (match) {
+          filePath = match[1];
+        }
+      }
+
+      // Alternative: check for data-file-path attribute
+      if (!filePath) {
+        filePath = this.getAttribute('data-file-path');
+      }
+
+      if (!filePath) {
+        console.error('No file path found for download button');
+        return;
+      }
+
+      try {
+        // Show download feedback
+        showDownloadMessage(attachmentName);
+
+        // Get authentication token
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('You must be logged in to download attachments.');
+        }
+
+        // Make authenticated request to download endpoint
+        const response = await fetch('/uploads/' + filePath, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `Download failed: ${response.status}`);
+        }
+
+        // Get filename from response headers or use original filename
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = attachmentName;
+        if (contentDisposition) {
+          const matches = contentDisposition.match(/filename="([^"]*)"/);
+          if (matches && matches[1]) {
+            filename = matches[1];
+          }
+        }
+
+        // Create blob from response
+        const blob = await response.blob();
+
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+      } catch (error) {
+        console.error('Download error:', error);
+        alert('Failed to download file: ' + error.message);
+        // Remove the download message if it was shown
+        const msg = document.querySelector('.download-message');
+        if (msg) msg.remove();
+      }
     });
   });
 

@@ -108,11 +108,30 @@ class ApiService {
         return this.request(CONFIG.ENDPOINTS.ANNOUNCEMENTS);
     }
 
-    async createAnnouncement(announcement) {
-        return this.request(CONFIG.ENDPOINTS.ANNOUNCEMENTS, {
-            method: 'POST',
-            body: JSON.stringify(announcement)
-        });
+    async createAnnouncement(announcementData) {
+        // Handle file uploads with FormData for announcements with attachments
+        if (announcementData.files && announcementData.files.length > 0) {
+            const formData = new FormData();
+            formData.append('title', announcementData.title);
+            formData.append('content', announcementData.content);
+
+            // Add files with the correct field name 'files'
+            announcementData.files.forEach((file, index) => {
+                formData.append('files', file);
+            });
+
+            return this.request(CONFIG.ENDPOINTS.ANNOUNCEMENTS, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${this.token}` }, // Remove Content-Type for FormData
+                body: formData
+            });
+        } else {
+            // No files - use regular JSON approach
+            return this.request(CONFIG.ENDPOINTS.ANNOUNCEMENTS, {
+                method: 'POST',
+                body: JSON.stringify(announcementData)
+            });
+        }
     }
 
     async deleteAnnouncement(id) {
