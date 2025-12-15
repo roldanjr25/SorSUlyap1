@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Schedule Management</title>
+
+    <!-- Vendor CSS Files -->
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!--Header Icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main CSS File -->
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
+</head>
+<body>
+    <header id="header" class="header d-flex align-items-center sticky-top">
+        <div class="logo">Admin Panel</div>
+        <nav class="nav">
+            <a href="index.html">Dashboard</a>
+            <a href="announcement.html">Announcement</a>
+            <a href="user_management.html">User Management</a>
+            <a href="event_calendar.html">Event Calendar</a>
+            <a href="schedule_admin.html" class="active">Schedule Management</a>
+            <a href="notification.html">Notification</a>
+            <a href="system_settings.html">System Settings</a>
+        </nav>
+        <div class="header-right">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search">
+            </div>
+            <button class="icon-button">
+                <i class="fas fa-user"></i>
+            </button>
+        </div>
+    </header>
+    <div class="container">
+        <main>
+            <h1>Schedule Management</h1>
+            <p>Upload and manage class schedules and academic calendars.</p>
+
+            <section class="new-event-form">
+                <h2>Upload New Schedule</h2>
+                <form id="schedule-form">
+                    <div class="form-group">
+                        <label for="schedule-title">Schedule Title</label>
+                        <input type="text" id="schedule-title" name="title" class="form-input" placeholder="e.g., BS Computer Science - 1st Semester 2025" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-description">Description (Optional)</label>
+                        <textarea id="schedule-description" name="description" class="form-input form-textarea" placeholder="Additional details about this schedule"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-type">Schedule Type</label>
+                        <select id="schedule-type" name="scheduleType" class="form-input" required>
+                            <option value="Academic">Academic Calendar</option>
+                            <option value="Class">Class Schedule</option>
+                            <option value="Exam">Exam Schedule</option>
+                            <option value="Event">Event Schedule</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-department">Department/Program</label>
+                        <select id="schedule-department" name="program" class="form-input" required>
+                            <option value="ITE">ITE Department</option>
+                            <option value="BTVRM">BTVRM Department</option>
+                            <option value="ABA">ABA Department</option>
+                            <option value="Educ">Education Department</option>
+                            <option value="All">All Departments</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-yrlevel">Year Level</label>
+                        <select id="schedule-yrlevel" name="yearLevel" class="form-input">
+                            <option value="">All Years</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-section">Section (Optional)</label>
+                        <input type="text" id="schedule-section" name="section" class="form-input" placeholder="e.g., Section A">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-semester">Semester</label>
+                        <select id="schedule-semester" name="semester" class="form-input" required>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="Summer">Summer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-academicyear">Academic Year</label>
+                        <select id="schedule-academicyear" name="academicYear" class="form-input" required>
+                            <option value="2024-2025">2024-2025</option>
+                            <option value="2025-2026">2025-2026</option>
+                            <option value="2026-2027">2026-2027</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule-file">Schedule File</label>
+                        <input type="file" id="schedule-file" name="file" class="form-input form-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.ppt,.pptx,.txt,.rtf,.zip,.rar,.7z" required>
+                        <small style="color: #666;">Supported: PDF, Word, Excel, PowerPoint, Images, Archives</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-add" id="schedule-submit">
+                        <i class="fas fa-upload"></i> Upload Schedule
+                    </button>
+                </form>
+            </section>
+
+            <section class="events-list">
+                <h2>Uploaded Schedules</h2>
+                <div id="schedules-list">
+                    <!-- Schedules will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="../config.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

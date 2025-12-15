@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login Bypass - Testing</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .btn { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Admin Testing Tools</h1>
+        <p>Use these buttons to quickly access admin features for testing:</p>
+
+        <h2>Login as Admin</h2>
+        <button class="btn" onclick="loginAsAdmin()">🚀 Login as Admin</button>
+        <p><small>Automatically logs you in as admin@sorsu.edu.ph and redirects to admin panel</small></p>
+
+        <h2>Go to Admin Panel</h2>
+        <button class="btn" onclick="goToAdminPanel()">📊 Admin Dashboard</button>
+        <p><small>Direct link to admin dashboard (requires admin login)</small></p>
+
+        <h2>Create Test Users</h2>
+        <button class="btn" onclick="goToUserManagement()">👥 User Management</button>
+        <p><small>Create new admin/faculty accounts</small></p>
+
+        <h2>Regular Login</h2>
+        <button class="btn" onclick="goToRegularLogin()">🔐 Login Page</button>
+        <p><small>Use: admin@sorsu.edu.ph / admin123</small></p>
+    </div>
+
+    <script>
+        async function loginAsAdmin() {
+            try {
+                // Simulate admin login
+                const testToken = 'simulated_admin_token';
+                const testUser = { role: 'Admin', name: 'Test Admin', email: 'admin@sorsu.edu.ph' };
+
+                localStorage.setItem('token', testToken);
+                localStorage.setItem('user', JSON.stringify(testUser));
+                localStorage.setItem('userRole', 'Admin');
+
+                alert('Logged in as Admin! Redirecting...');
+                window.location.href = 'admin/index.html';
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            }
+        }
+
+        function goToAdminPanel() {
+            window.location.href = 'admin/index.html';
+        }
+
+        function goToUserManagement() {
+            window.location.href = 'admin/user_management.html';
+        }
+
+        function goToRegularLogin() {
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

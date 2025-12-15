@@ -27,31 +27,55 @@ document.getElementById('login-form').addEventListener('submit', async function(
     return;
   }
 
+  console.log('🧪 Starting login with:', { email, password });
+
+  // Show loading
+  const submitBtn = document.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.textContent = 'Logging in...';
+  submitBtn.disabled = true;
+
+  console.log('📡 Making API call...');
+
+  // Add timeout to prevent infinite loading
+  const loginTimeout = setTimeout(() => {
+    console.warn('Login timeout - forcing error');
+    submitBtn.textContent = 'Login';
+    submitBtn.disabled = false;
+    alert('Login timed out. Check server connection and try again.');
+  }, 15000); // 15 second timeout
+
   try {
-    // Show loading
-    const submitBtn = document.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-    submitBtn.textContent = 'Logging in...';
-    submitBtn.disabled = true;
-
-    // Attempt login - this will send OTP for 2FA
+    // Attempt login - backend authenticates directly and returns token
     const result = await api.login({ email, password });
-    currentLoginEmail = email;
+    clearTimeout(loginTimeout);
+    console.log('📥 API response:', result);
 
-    // If login successful and OTP sent, show OTP modal
-    if (result.message && result.message.includes('OTP')) {
-      showOtpModal();
-    } else {
-      // Direct login (no OTP required)
+    // Check success more thoroughly
+    if (result && result.success && result.token) {
+      console.log('✅ Login successful, storing credentials');
+      // Login successful - redirect based on role
       alert('Login successful!');
-      window.location.href = 'index.html';
+      const user = result.user;
+      if (user && user.role === 'Admin') {
+        console.log('🚀 Redirecting to admin panel');
+        window.location.href = 'admin/index.html';
+      } else {
+        console.log('🚀 Redirecting to main dashboard');
+        window.location.href = 'index.html';
+      }
+    } else {
+      console.error('❌ Login failed - invalid response:', result);
+      alert('Login failed: ' + (result?.message || 'Invalid credentials or server error'));
     }
 
   } catch (error) {
-    alert('Login failed: ' + error.message);
+    clearTimeout(loginTimeout);
+    console.error('❌ Login exception:', error);
+    const errorMsg = error.message || 'Network error - check server and try again';
+    alert('Login failed: ' + errorMsg);
   } finally {
     // Reset loading state
-    const submitBtn = document.querySelector('button[type="submit"]');
     submitBtn.textContent = 'Login';
     submitBtn.disabled = false;
   }
