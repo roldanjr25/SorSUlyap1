@@ -79,7 +79,14 @@ body {
 }
 
 /* Container styles */
-.container { max-width: 1200px; margin: 0 auto; padding: 1em; width: 100%; }
+.container { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 1em; 
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
 /* Centering wrapper for admin main content */
 .admin-main-wrap {
@@ -99,12 +106,14 @@ body {
     max-width: 1200px;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 /* Center the main content */
 main {
     width: 100%;
     max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* User Management styles */
