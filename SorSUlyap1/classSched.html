@@ -81,6 +81,25 @@
       display: flex;
       justify-content: center;
     }
+
+    .schedule-header-container {
+      width: 100%;
+      background-color: #f8f9fa;
+      padding: 30px 20px;
+      margin-bottom: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .schedule-header-container .header-container {
+      text-align: center;
+    }
+
+    .schedule-header-container h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      color: #333;
+    }
   </style>
   
 </head>
@@ -113,11 +132,12 @@
 
   <main class="main">
       <!-- Main Content - Grid View -->
-    <div id="gridView" class="container">
-        <div class="header-container">
-            <div class="header-icon">📋</div>
-            <div class="header-text">
-                <h1>Class Schedule</h1>
+    <div id="gridView">
+        <div class="schedule-header-container">
+            <div class="header-container">
+                <div class="header-text">
+                    <h1>Class Schedule</h1>
+                </div>
             </div>
         </div>
 

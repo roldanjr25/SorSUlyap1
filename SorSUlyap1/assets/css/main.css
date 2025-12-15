@@ -18,7 +18,7 @@
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root { 
-  --: linear-gradient(180deg, backgroundrgb(236, 193, 193) 2%, rgb(197, 87, 87) 100%); /* Background color for the entire website, including individual sections */
+  --background: linear-gradient(180deg, rgb(236, 193, 193) 2%, rgb(197, 87, 87) 100%); /* Background color for the entire website, including individual sections */
   --default-color: #000000; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #000000; /* Color for headings, subheadings and title throughout the website */
   --accent-color: #136ad5; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
@@ -1134,7 +1134,7 @@ h6 {
   right: 15px;
   bottom: 15px;
   z-index: 99999;
-  background-color: var(--accent-color);
+  background-color:#D68B8B;
   width: 40px;
   height: 40px;
   border-radius: 4px;
@@ -1148,8 +1148,8 @@ h6 {
 }
 
 .scroll-top:hover {
-  background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
-  color: var(--contrast-color);
+  background-color: #b97070;
+  color: #D68B8B;
 }
 
 .scroll-top.active {

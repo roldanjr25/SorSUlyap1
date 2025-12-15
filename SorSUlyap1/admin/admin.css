@@ -79,7 +79,33 @@ body {
 }
 
 /* Container styles */
-.container { max-width: 1200px; margin: 0 auto; padding: 1em; }
+.container { max-width: 1200px; margin: 0 auto; padding: 1em; width: 100%; }
+
+/* Centering wrapper for admin main content */
+.admin-main-wrap {
+    /* Header total height ~ 100px (padding + content); adjust if needed */
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center; /* vertical center */
+    justify-content: center; /* horizontal center container */
+    padding: 20px; /* small breathing space around */
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* ensure the inner container doesn't stretch full width on very large screens */
+.admin-main-wrap > .container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Center the main content */
+main {
+    width: 100%;
+    max-width: 1200px;
+}
 
 /* User Management styles */
 table { width: 100%; border-collapse: collapse; margin: 1em 0; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }

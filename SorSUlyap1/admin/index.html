@@ -27,24 +27,8 @@
 
     <!-- Main CSS File -->
     <link href="../assets/css/main.css" rel="stylesheet">
-    <style>
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 1em; }
-        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1em; margin-bottom: 2em; }
-        .stat-card { background: #f4f4f4; padding: 1.5em; border-radius: 8px; text-align: center; border: 1px solid #ddd; transition: transform 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-        .recent-activities { background: #fff; padding: 1.5em; border-radius: 8px; margin-bottom: 2em; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .recent-activities h2 { margin-top: 0; }
-        .activity-item { display: flex; align-items: flex-start; padding: 0.5em 0; border-bottom: 1px solid #f0f0f0; }
-        .activity-item i { color: #007bff; margin-right: 0.5em; }
-        .activity-content { flex-grow: 1; }
-        .activity-time { font-size: 0.8em; color: #6c757d; }
-        .dashboard-actions { background: #fff; padding: 1.5em; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid #ddd; }
-        .dashboard-actions h2 { margin-top: 0; }
-        .dashboard-actions button { margin: 0.5em; padding: 0.75em 1.25em; border: none; background: #007bff; color: white; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
-        .dashboard-actions button:hover { background: #0056b3; }
-    </style>
-</head>
+    <link href="admin.css" rel="stylesheet">
+    </head>
 <body>
     <header id="header" class="header d-flex align-items-center sticky-top">
         <div class="logo">Admin Panel</div>
@@ -66,7 +50,8 @@
             </button>
         </div>
     </header>
-    <div class="container">
+    <div class="admin-main-wrap">
+        <div class="container">
         <main>
             <h1>Admin Dashboard</h1>
             <section class="dashboard-stats">
@@ -87,7 +72,7 @@
                     <p>12</p>
                 </div>
             </section>
-            <section class="recent-activities" style="background: #fff; padding: 1.5em; border-radius: 8px; margin-bottom: 2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid #ddd;">
+            <section class="recent-activities">
                 <h2>Recent Activities</h2>
                 <div class="activity-item">
                     <i class="fas fa-user-plus"></i>
@@ -125,6 +110,7 @@
                 <button onclick="window.location.href='system_settings.html'">System Settings</button>
             </section>
         </main>
+    </div>
     </div>
     <!-- Vendor JS Files -->
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
