@@ -97,6 +97,17 @@ body {
     max-width: 1000px; /* limit content width for better readability */
 }
 
+/* Fallback: pages without admin-main-wrap */
+.header + .container {
+    display: flex;
+    justify-content: center;
+}
+
+.header + .container > main {
+    width: 100%;
+    max-width: 1000px;
+}
+
 /* User Management styles */
 table { width: 100%; border-collapse: collapse; margin: 1em 0; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
 th, td { padding: 1em; text-align: left; border-bottom: 1px solid #eee; }
