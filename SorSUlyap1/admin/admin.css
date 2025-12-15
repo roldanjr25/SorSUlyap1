@@ -81,6 +81,22 @@ body {
 /* Container styles */
 .container { width: 100%; max-width: 1600px; margin: 0 auto; padding: 1em; }
 
+/* Center admin main content */
+.admin-main-wrap {
+    display: flex;
+    justify-content: center; /* horizontal center */
+}
+
+.admin-main-wrap > .container {
+    display: flex;
+    justify-content: center; /* center inner main horizontally */
+}
+
+.admin-main-wrap main {
+    width: 100%;
+    max-width: 1000px; /* limit content width for better readability */
+}
+
 /* User Management styles */
 table { width: 100%; border-collapse: collapse; margin: 1em 0; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
 th, td { padding: 1em; text-align: left; border-bottom: 1px solid #eee; }
