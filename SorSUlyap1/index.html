@@ -242,13 +242,19 @@
       const token = localStorage.getItem(CONFIG.TOKEN_KEY);
       if (!token) {
         // If not logged in, keep the static welcome announcements
+        console.log('No token found, keeping static announcements');
         return;
       }
 
       try {
+        console.log('Loading announcements from API...');
         const announcements = await api.getAnnouncements();
-        if (announcements.success) {
+        console.log('Announcements response:', announcements);
+        
+        if (announcements.success && Array.isArray(announcements.data) && announcements.data.length > 0) {
           displayAnnouncements(announcements.data);
+        } else {
+          console.log('No announcements found, keeping static announcements');
         }
       } catch (error) {
         console.error('Failed to load announcements:', error);
@@ -285,9 +291,9 @@
                 <div class="attachment-item">
                   <div class="attachment-info">
                     <i class="fas fa-file-pdf attachment-icon"></i>
-                    <span class="attachment-name">${attachment.File_Name}</span>
+                    <span class="attachment-name">${attachment.File_Name || 'File'}</span>
                   </div>
-                  <button class="download-btn" onclick="downloadAttachment('${attachment.File_Path}')">
+                  <button class="download-btn" onclick="downloadAttachment('${attachment.File_Path}', '${attachment.File_Name}')">
                     <i class="fas fa-download"></i>
                     Download
                   </button>
@@ -303,8 +309,8 @@
               <i class="fas fa-user"></i>
             </div>
             <div class="admin-info">
-              <h3>${announcement.Posted_by_Name || 'Admin'}</h3>
-              <p>Administrator</p>
+              <h3>${announcement.Posted_by_Name || 'Faculty'}</h3>
+              <p>${announcement.Target_Audience || 'Announcement'}</p>
             </div>
           </div>
 
@@ -330,11 +336,16 @@
       });
     }
 
-    function downloadAttachment(filePath) {
+    function downloadAttachment(filePath, fileName) {
+      if (!filePath) {
+        alert('File path not available');
+        return;
+      }
       // Create a temporary link to download the file
       const link = document.createElement('a');
-      link.href = '/uploads/' + filePath; // Adjust path as needed
-      link.download = filePath;
+      const actualFileName = filePath.split(/[/\\]/).pop();
+      link.href = '/uploads/' + actualFileName;
+      link.download = fileName || actualFileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

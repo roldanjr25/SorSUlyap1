@@ -231,6 +231,11 @@
             const scheduleGrid = document.querySelector('.schedule-grid');
             const token = localStorage.getItem(CONFIG?.TOKEN_KEY || 'token');
 
+            if (!token) {
+                console.log('No token found, keeping static schedules');
+                return;
+            }
+
             try {
                 console.log('Loading schedules from API...');
                 const response = await fetch(CONFIG.ENDPOINTS.SCHEDULES, {

@@ -139,6 +139,7 @@
             const token = localStorage.getItem(CONFIG?.TOKEN_KEY || 'token');
             if (!token) {
                 console.log('No token found, skipping API events');
+                eventsLoaded = true;
                 return; // Don't load if not logged in
             }
 
@@ -174,8 +175,8 @@
                             date: eventDate ? eventDate.getDate() : 1,
                             month: eventDate ? eventDate.getMonth() : 0,
                             year: eventDate ? eventDate.getFullYear() : 2025,
-                            title: event.Event_Name || event.title || 'Untitled Event',
-                            time: event.Time ? formatTimeForCalendar(event.Time) : "TBD",
+                            title: event.Event_Name || event.eventName || event.title || 'Untitled Event',
+                            time: event.Time ? formatTimeForCalendar(event.Time) : (event.date ? extractTimeFromDateTime(event.date) : "TBD"),
                             location: event.Location || event.location || "TBD"
                         };
                     });
@@ -197,6 +198,17 @@
                 console.error('Error loading API events:', error);
             } finally {
                 eventsLoaded = true;
+            }
+        }
+
+        function extractTimeFromDateTime(dateTimeStr) {
+            if (!dateTimeStr) return "TBD";
+            try {
+                const timePart = dateTimeStr.split('T')[1];
+                if (!timePart) return "TBD";
+                return formatTimeForCalendar(timePart);
+            } catch (error) {
+                return "TBD";
             }
         }
 

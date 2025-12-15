@@ -579,22 +579,41 @@
         document.getElementById('announcement-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+            if (!token) {
+                alert('Please log in first to post announcements.');
+                return;
+            }
+
             const formData = new FormData(this);
             const submitBtn = document.getElementById('announcement-submit');
 
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
 
+            console.log('Posting announcement with token:', token ? 'Present' : 'Missing');
+            console.log('FormData contents:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`  ${key}:`, value);
+            }
+
             fetch(CONFIG.ENDPOINTS.ANNOUNCEMENTS, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem(CONFIG.TOKEN_KEY)}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json().then(data => ({
+                    status: response.status,
+                    data: data
+                }));
+            })
+            .then(({ status, data }) => {
+                console.log('Response data:', data);
+                if (status === 201 || data.success) {
                     alert('Announcement posted successfully!');
                     closeAllModals();
                     document.getElementById('announcement-form').reset();
@@ -604,7 +623,7 @@
             })
             .catch(error => {
                 console.error('Announcement error:', error);
-                alert('Network error. Please try again.');
+                alert('Network error: ' + error.message);
             })
             .finally(() => {
                 submitBtn.disabled = false;
@@ -615,6 +634,12 @@
         // Event Form Handler
         document.getElementById('event-form').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+            if (!token) {
+                alert('Please log in first to create events.');
+                return;
+            }
 
             const formData = {
                 eventName: document.getElementById('event-title').value,
@@ -630,17 +655,27 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
 
+            console.log('Creating event with token:', token ? 'Present' : 'Missing');
+            console.log('Event data:', formData);
+
             fetch(CONFIG.ENDPOINTS.EVENTS, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem(CONFIG.TOKEN_KEY)}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json().then(data => ({
+                    status: response.status,
+                    data: data
+                }));
+            })
+            .then(({ status, data }) => {
+                console.log('Response data:', data);
+                if (status === 201 || data.success) {
                     alert('Event created successfully!');
                     closeAllModals();
                     document.getElementById('event-form').reset();
@@ -650,7 +685,7 @@
             })
             .catch(error => {
                 console.error('Event error:', error);
-                alert('Network error. Please try again.');
+                alert('Network error: ' + error.message);
             })
             .finally(() => {
                 submitBtn.disabled = false;
@@ -662,22 +697,41 @@
         document.getElementById('schedule-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+            if (!token) {
+                alert('Please log in first to upload schedules.');
+                return;
+            }
+
             const formData = new FormData(this);
             const submitBtn = document.getElementById('schedule-submit');
 
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
+            console.log('Uploading schedule with token:', token ? 'Present' : 'Missing');
+            console.log('FormData contents:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`  ${key}:`, value);
+            }
+
             fetch(CONFIG.ENDPOINTS.SCHEDULES, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem(CONFIG.TOKEN_KEY)}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json().then(data => ({
+                    status: response.status,
+                    data: data
+                }));
+            })
+            .then(({ status, data }) => {
+                console.log('Response data:', data);
+                if (status === 201 || data.success) {
                     alert('Schedule uploaded successfully!');
                     closeAllModals();
                     document.getElementById('schedule-form').reset();
@@ -687,7 +741,7 @@
             })
             .catch(error => {
                 console.error('Schedule upload error:', error);
-                alert('Network error. Please try again.');
+                alert('Network error: ' + error.message);
             })
             .finally(() => {
                 submitBtn.disabled = false;
