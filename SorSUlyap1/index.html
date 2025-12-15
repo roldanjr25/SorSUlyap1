@@ -376,14 +376,57 @@
       }
     }
 
-    function downloadAttachment(filePath) {
-      // Create a temporary link to download the file
-      const link = document.createElement('a');
-      link.href = '/uploads/' + filePath; // Adjust path as needed
-      link.download = filePath;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    async function downloadAttachment(filePath) {
+      try {
+        // Get authentication token
+        const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+        if (!token) {
+          alert('You must be logged in to download attachments.');
+          return;
+        }
+
+        // Make authenticated request to download endpoint
+        const response = await fetch('/uploads/' + filePath, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `Download failed: ${response.status}`);
+        }
+
+        // Get filename from response headers or use original filename
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = filePath;
+        if (contentDisposition) {
+          const matches = contentDisposition.match(/filename="([^"]*)"/);
+          if (matches && matches[1]) {
+            filename = matches[1];
+          }
+        }
+
+        // Create blob from response
+        const blob = await response.blob();
+
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+      } catch (error) {
+        console.error('Download error:', error);
+        alert('Failed to download file: ' + error.message);
+      }
     }
 
     // Add a test notification button for demo
