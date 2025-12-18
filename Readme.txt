@@ -1,6 +1,6 @@
 Project Title : SorSUlyap
 
-  Description : SorSUlyap is a centralized university system for announcements, featuring integrated scheduling and calendar capabilities. The SorSUlyap system serves as a secure and       exclusive hub, accessible only through SorSU Email, and gives a centralized platform to view, post, and manage any announcements and events. This system enhances communication,           improves transparency, and provides an accessible and efficient announcement.
+  Description : SorSUlyap is a centralized university system for announcements, featuring integrated scheduling and calendar capabilities. The SorSUlyap system serves as a secure and exclusive hub, accessible only through SorSU Email, and gives a centralized platform to view, post, and manage any announcements and events. This system enhances communication, improves transparency, and provides an accessible and efficient announcement.
 
 List of Features :
   Official Announcment Page
@@ -12,9 +12,11 @@ List of Features :
   Offline mode
   
 
-Instructions :
-  
+Instructions on how to run system:
+  The Backend should be initialized first so that users can log in.
+
 Technologies/Frameworks Used :  
+  Node.js/Express.js
   
 
 Team Members :
