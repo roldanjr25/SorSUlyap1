@@ -13,7 +13,7 @@ List of Features :
   
 
 Instructions on how to run system:
-  The Backend should be initialized first so that users can log in.
+  The Backend should be initialized first so that users can log in to the system. Look for the welcome.html at SorSUlyap1 folder and run the website.
 
 Technologies/Frameworks Used :  
   Node.js/Express.js
