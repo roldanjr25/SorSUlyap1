@@ -13,7 +13,13 @@ List of Features :
   
 
 Instructions on how to run system:
-  The Backend should be initialized first so that users can log in to the system. Look for the welcome.html at SorSUlyap1 folder and run the website.
+  - Set Up the Database( Start MySQL server)
+  - Set Up the Backend server ("npm start"/"npm run dev")
+  - Access the Frontend 
+  - Open the SorSUlyap1/welcome.html directly in your web     browser.
+  - Register/login with a valid SorSU email (system validates email domains).
+  - Admins and faculty can post announcements and manage schedules.
+  - Students can view announcements, schedules, and events.
 
 Technologies/Frameworks Used :  
   Node.js/Express.js
